@@ -54,7 +54,7 @@ class HeroPage(MetadataPageMixin, AllDotaPage, Page):
     abilities = StreamField(
         [
             ('ability', HeroAbility())
-        ], null=True
+        ], null=True, blank=True
     )
 
     content_panels = [
