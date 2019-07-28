@@ -79,3 +79,4 @@ class HeroPage(MetadataPageMixin, AllDotaPage, Page):
         )
         self.title = self.hero.name
         self.slug = slugify(self.title)
+        self.search_image = self.hero.horizontal_image
