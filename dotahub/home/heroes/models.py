@@ -55,7 +55,6 @@ class HeroPropertyImage(models.Model):
 
 class HeroCategory(models.Model):
     name = models.CharField(max_length=60, null=True, blank=False)
-    farsi_name = models.CharField(max_length=60, null=True, blank=False)
 
     panels = [
         FieldPanel('name'), FieldPanel('farsi_name')
