@@ -207,7 +207,6 @@ class Hero(models.Model):
         ),
         MultiFieldPanel(
             [
-                FieldPanel('biography'),
                 FieldPanel('farsi_biography')
             ], heading='Bio', classname='collapsible collapsed'
         )
