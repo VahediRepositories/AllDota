@@ -11,6 +11,7 @@ from wagtail.snippets.models import register_snippet
 from .blocks import *
 
 
+@register_snippet
 class HeroPropertyImage(models.Model):
     intelligence = models.ForeignKey(
         'wagtailimages.Image',
