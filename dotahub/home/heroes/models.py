@@ -67,14 +67,17 @@ class HeroCategory(models.Model):
         abstract = True
 
 
+@register_snippet
 class HeroType(HeroCategory):
     pass
 
 
+@register_snippet
 class HeroAttackType(HeroCategory):
     pass
 
 
+@register_snippet
 class HeroRole(HeroCategory):
     pass
 
