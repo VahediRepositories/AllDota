@@ -1,10 +1,36 @@
+import re
+
 from wagtail.core.models import Page
 from wagtailmetadata.models import MetadataPageMixin
 
 from django.utils.text import slugify
+from django.utils import translation
 
 from .heroes.blocks import *
 from .heroes.models import *
+
+
+class MultilingualPageMixin:
+
+    @staticmethod
+    def convert(name):
+        s1 = re.sub('(.)([A-Z][a-z]+)', r'\1_\2', name)
+        return re.sub('([a-z0-9])([A-Z])', r'\1_\2', s1).lower()
+
+    @property
+    def farsi_template(self):
+        return 'home/fa/' + self.convert(self.__class__.__name__) + '.html'
+
+    @property
+    def english_template(self):
+        return 'home/en/' + self.convert(self.__class__.__name__) + '.html'
+
+    def get_language_template(self):
+        language = translation.get_language()
+        if language == 'fa':
+            return self.farsi_template
+        else:
+            return self.english_template
 
 
 class HomePage(Page):
@@ -13,40 +39,18 @@ class HomePage(Page):
     ]
 
 
-class AllDotaPage:
-    @staticmethod
-    def get_intelligence_image():
-        return HeroPropertyImage.objects.all()[0].intelligence
-
-    @staticmethod
-    def get_agility_image():
-        return HeroPropertyImage.objects.all()[0].agility
-
-    @staticmethod
-    def get_strength_image():
-        return HeroPropertyImage.objects.all()[0].strength
-
-    @staticmethod
-    def get_damage_image():
-        return HeroPropertyImage.objects.all()[0].damage
-
-    @staticmethod
-    def get_move_speed_image():
-        return HeroPropertyImage.objects.all()[0].move_speed
-
-    @staticmethod
-    def get_armor_image():
-        return HeroPropertyImage.objects.all()[0].armor
-
-
-class HeroesPage(MetadataPageMixin, AllDotaPage, Page):
+class HeroesPage(MetadataPageMixin, HeroesPageMixin, MultilingualPageMixin, Page):
     promote_panels = Page.promote_panels + MetadataPageMixin.panels
 
     parent_page_types = ['home.HomePage']
     subpage_types = ['home.HeroPage']
 
+    @property
+    def template(self):
+        return self.get_language_template()
 
-class HeroPage(MetadataPageMixin, AllDotaPage, Page):
+
+class HeroPage(MetadataPageMixin, HeroesPageMixin, MultilingualPageMixin, Page):
     hero = models.OneToOneField(
         Hero, on_delete=models.SET_NULL, blank=False, null=True
     )
@@ -68,15 +72,29 @@ class HeroPage(MetadataPageMixin, AllDotaPage, Page):
     parent_page_types = ['home.HeroesPage']
     subpage_types = []
 
+    def serve(self, request, *args, **kwargs):
+        language = translation.get_language()
+        if language == 'fa':
+            self.search_description = 'هر آنچه كه در مورد {} در دوتا بايد بدانيد. شامل مطالب آموزشى، تمام قابليت ها و جديد ترين تغييرات'.format(
+                self.hero.farsi_name
+            )
+            self.seo_title = '{} - {} - {} - {} - {}'.format(
+                self.hero.name, self.hero.farsi_name,
+                'Hero', 'هيرو', 'Dota2'
+            )
+        else:
+            self.search_description = 'Every thing you need to know about Dota2 Hero named {}.'.format(
+                self.hero.name
+            )
+            self.seo_title = '{} - Hero - Dota2'.format(self.hero.name)
+        return super().serve(request, *args, **kwargs)
+
     def clean(self):
         super().clean()
-        self.search_description = 'هر آنچه كه در مورد {} در دوتا بايد بدانيد. شامل مطالب آموزشى، تمام قابليت ها و جديد ترين تغييرات'.format(
-            self.hero.farsi_name
-        )
-        self.seo_title = '{} - {} - {} - {} - {}'.format(
-            self.hero.name, self.hero.farsi_name,
-            'Hero', 'هيرو', 'Dota2'
-        )
         self.title = self.hero.name
         self.slug = slugify(self.title)
         self.search_image = self.hero.horizontal_image
+
+    @property
+    def template(self):
+        return self.get_language_template()

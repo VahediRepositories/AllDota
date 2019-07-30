@@ -4,6 +4,8 @@
 {% load wagtailimages_tags %}
 {% load wagtailcore_tags %}
 
+{% block language %}fa{% endblock %}
+
 {% block additional_css %}
 
 {% endblock %}
@@ -49,7 +51,7 @@
                                         data-toggle="tooltip"
                                         title="Damage"
                                         style="vertical-align: middle;">
-                                        {% image page.get_damage_image width-33 height-33 as damage_img %}
+                                        {% image page.damage_image width-33 height-33 as damage_img %}
                                         <img src="{{ damage_img.url }}"
                                              alt="{{ damage_img.alt }}">
                                     </td>
@@ -65,7 +67,7 @@
                                         data-toggle="tooltip"
                                         title="Intelligence"
                                         style="vertical-align: middle;">
-                                        {% image page.get_intelligence_image width-33 height-33 as intelligence_img %}
+                                        {% image page.intelligence_image width-33 height-33 as intelligence_img %}
                                         <img src="{{ intelligence_img.url }}"
                                              alt="{{ intelligence_img.alt }}">
                                     </td>
@@ -82,7 +84,7 @@
                                         data-toggle="tooltip"
                                         title="Move Speed"
                                         style="vertical-align: middle;">
-                                        {% image page.get_move_speed_image width-55 height-55 as move_speed_img %}
+                                        {% image page.move_speed_image width-55 height-55 as move_speed_img %}
                                         <img src="{{ move_speed_img.url }}"
                                              alt="{{ move_speed_img.alt }}">
                                     </td>
@@ -98,7 +100,7 @@
                                         data-toggle="tooltip"
                                         title="Agility"
                                         style="vertical-align: middle;">
-                                        {% image page.get_agility_image width-33 height-33 as agility_img %}
+                                        {% image page.agility_image width-33 height-33 as agility_img %}
                                         <img src="{{ agility_img.url }}"
                                              alt="{{ agility_img.alt }}">
                                     </td>
@@ -115,7 +117,7 @@
                                         data-toggle="tooltip"
                                         title="Armor"
                                         style="vertical-align: middle;">
-                                        {% image page.get_armor_image width-55 height-55 as armor_img %}
+                                        {% image page.armor_image width-55 height-55 as armor_img %}
                                         <img src="{{ armor_img.url }}"
                                              alt="{{ armor_img.alt }}">
                                     </td>
@@ -131,7 +133,7 @@
                                         data-toggle="tooltip"
                                         title="Strength"
                                         style="vertical-align: middle;">
-                                        {% image page.get_strength_image width-33 height-33 as strength_img %}
+                                        {% image page.strength_image width-33 height-33 as strength_img %}
                                         <img src="{{ strength_img.url }}"
                                              alt="{{ strength_img.alt }}">
                                     </td>

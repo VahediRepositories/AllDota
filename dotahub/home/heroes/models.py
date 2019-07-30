@@ -53,6 +53,32 @@ class HeroPropertyImage(models.Model):
     ]
 
 
+class HeroesPageMixin:
+    @property
+    def intelligence_image(self):
+        return HeroPropertyImage.objects.all()[0].intelligence
+
+    @property
+    def agility_image(self):
+        return HeroPropertyImage.objects.all()[0].agility
+
+    @property
+    def strength_image(self):
+        return HeroPropertyImage.objects.all()[0].strength
+
+    @property
+    def damage_image(self):
+        return HeroPropertyImage.objects.all()[0].damage
+
+    @property
+    def move_speed_image(self):
+        return HeroPropertyImage.objects.all()[0].move_speed
+
+    @property
+    def armor_image(self):
+        return HeroPropertyImage.objects.all()[0].armor
+
+
 class HeroCategory(models.Model):
     name = models.CharField(max_length=60, null=True, blank=False)
 
@@ -151,6 +177,7 @@ class Hero(models.Model):
         )
     )
 
+    biography = RichTextField(null=True, blank=False)
     farsi_biography = RichTextField(null=True, blank=False)
 
     def get_intelligence(self):
@@ -206,6 +233,7 @@ class Hero(models.Model):
         ),
         MultiFieldPanel(
             [
+                FieldPanel('biography'),
                 FieldPanel('farsi_biography')
             ], heading='Bio', classname='collapsible collapsed'
         )

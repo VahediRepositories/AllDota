@@ -35,4 +35,5 @@ class Armor(blocks.StructBlock):
 class HeroAbility(blocks.StructBlock):
     name = blocks.CharBlock(max_length=50)
     image = ImageChooserBlock()
+    summary = blocks.RichTextBlock()
     farsi_summary = blocks.RichTextBlock()

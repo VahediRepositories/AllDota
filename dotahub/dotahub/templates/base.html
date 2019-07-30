@@ -2,7 +2,7 @@
 {% load meta %}
 
 <!DOCTYPE html>
-<html class="no-js" lang="fa" dir="{% block direction %}{% endblock %}">
+<html class="no-js" lang="{% block language %}{% endblock %}" dir="{% block direction %}{% endblock %}">
 
     <head>
 
@@ -35,7 +35,7 @@
         {% block content %}{% endblock %}
 
         {% block extra_js %}
-            {# Override this in templates to add extra javascript #}
+
         {% endblock %}
     </body>
 
