@@ -62,6 +62,9 @@ class HeroesPage(MetadataPageMixin, HeroesPageMixin, MultilingualPageMixin, Page
     def template(self):
         return self.get_language_template()
 
+    def get_home_page(self):
+        return self.get_parent()
+
 
 class HeroPage(MetadataPageMixin, HeroesPageMixin, MultilingualPageMixin, Page):
     hero = models.OneToOneField(
@@ -81,6 +84,9 @@ class HeroPage(MetadataPageMixin, HeroesPageMixin, MultilingualPageMixin, Page):
 
     promote_panels = []
     settings_panels = []
+
+    def get_home_page(self):
+        return self.get_parent().specific.get_home_page()
 
     parent_page_types = ['home.HeroesPage']
     subpage_types = []
