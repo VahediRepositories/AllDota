@@ -16,7 +16,7 @@
 
 {% block breadcrumb %}
 
-    <li class="breadcrumb-item normal-p"><a href="/">Home</a></li>
+    <li class="breadcrumb-item normal-p"><a href="{{ page.get_parent.get_parent.get_url }}">Home</a></li>
     <li class="breadcrumb-item normal-p"><a href="{{ page.get_parent.get_url }}">Heroes</a></li>
     <li class="breadcrumb-item active normal-p">{{ page.hero.name }}</li>
 

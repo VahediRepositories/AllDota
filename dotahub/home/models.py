@@ -32,6 +32,19 @@ class MultilingualPageMixin:
         else:
             return self.english_template
 
+    def get_language_url(self, lang):
+        current_lang = translation.get_language()
+        translation.activate(lang)
+        url = self.get_url()
+        translation.activate(current_lang)
+        return url
+
+    def get_farsi_url(self):
+        return self.get_language_url('fa')
+
+    def get_english_url(self):
+        return self.get_language_url('en')
+
 
 class HomePage(Page):
     subpage_types = [

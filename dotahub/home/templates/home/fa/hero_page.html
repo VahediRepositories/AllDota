@@ -19,7 +19,7 @@
 
     <li class="breadcrumb-item active normal-p">{{ page.hero.name }}</li>
     <li class="breadcrumb-item normal-p"><a href="{{ page.get_parent.get_url }}">هيرو ها</a></li>
-    <li class="breadcrumb-item normal-p"><a href="/">خانه</a></li>
+    <li class="breadcrumb-item normal-p"><a href="{{ page.get_parent.get_parent.get_url }}">خانه</a></li>
 
 {% endblock %}
 
