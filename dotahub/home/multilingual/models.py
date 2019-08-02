@@ -43,12 +43,12 @@ class MultilingualPageMixin:
         return self.get_language_url('en')
 
     @staticmethod
-    def get_farsi_image():
-        return Language.objects.get(name='Persian').flag
+    def get_farsi_language():
+        return Language.objects.get(name='Persian')
 
     @staticmethod
-    def get_english_image():
-        return Language.objects.get(name='English').flag
+    def get_english_language():
+        return Language.objects.get(name='English')
 
 
 @register_snippet
