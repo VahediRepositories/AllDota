@@ -1,49 +1,10 @@
-import re
-
+from django.utils.text import slugify
 from wagtail.core.models import Page
 from wagtailmetadata.models import MetadataPageMixin
 
-from django.utils.text import slugify
-from django.utils import translation
-
 from .heroes.blocks import *
 from .heroes.models import *
-
-
-class MultilingualPageMixin:
-
-    @staticmethod
-    def convert(name):
-        s1 = re.sub('(.)([A-Z][a-z]+)', r'\1_\2', name)
-        return re.sub('([a-z0-9])([A-Z])', r'\1_\2', s1).lower()
-
-    @property
-    def farsi_template(self):
-        return 'home/fa/' + self.convert(self.__class__.__name__) + '.html'
-
-    @property
-    def english_template(self):
-        return 'home/en/' + self.convert(self.__class__.__name__) + '.html'
-
-    def get_language_template(self):
-        language = translation.get_language()
-        if language == 'fa':
-            return self.farsi_template
-        else:
-            return self.english_template
-
-    def get_language_url(self, lang):
-        current_lang = translation.get_language()
-        translation.activate(lang)
-        url = self.get_url()
-        translation.activate(current_lang)
-        return url
-
-    def get_farsi_url(self):
-        return self.get_language_url('fa')
-
-    def get_english_url(self):
-        return self.get_language_url('en')
+from .multilingual.models import *
 
 
 class HomePage(Page):
