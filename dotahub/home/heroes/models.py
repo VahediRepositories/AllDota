@@ -124,6 +124,13 @@ class Hero(models.Model):
     name = models.CharField(max_length=50, blank=False, unique=True)
     farsi_name = models.CharField(max_length=50, blank=False, unique=True)
 
+    ego = models.CharField(
+        max_length=10, choices=[
+            ('Radiant', 'Radiant'),
+            ('Dire', 'Dire'),
+        ], blank=False, null=True
+    )
+
     type = models.ForeignKey(
         HeroType, on_delete=models.SET_NULL, null=True, blank=False
     )
@@ -217,7 +224,12 @@ class Hero(models.Model):
         MultiFieldPanel(
             [
                 SnippetChooserPanel('type'),
-                FieldPanel("attack_types", widget=forms.CheckboxSelectMultiple),
+                FieldRowPanel(
+                    [
+                        FieldPanel("attack_types", widget=forms.CheckboxSelectMultiple),
+                        FieldPanel('ego'),
+                    ]
+                ),
                 StreamFieldPanel('roles'),
             ], heading='categories', classname='collapsible collapsed'
         ),
