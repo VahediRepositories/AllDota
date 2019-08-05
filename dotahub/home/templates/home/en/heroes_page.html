@@ -174,22 +174,22 @@
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-lg-12 text-center" style="margin-top: 5%;">
-                                    {% image page.strength_image width-33 height-33 as strength_img %}
-                                    <img src="{{ strength_img.url }}" alt="{{ strength_img.alt }}">
+                                    {% image page.intelligence_image width-33 height-33 as intelligence_img %}
+                                    <img src="{{ intelligence_img.url }}" alt="{{ intelligence_img.alt }}">
                                     <h2 class="normal-h2">
-                                        Strength
+                                        Intelligence
                                     </h2>
                                 </div>
                             </div>
                             <br>
                             <br>
                             <div class="row el-element-overlay">
-                                {% for hero_page in page.radiant_strength_heroes %}
+                                {% for hero_page in page.radiant_intelligence_heroes %}
                                     {% include 'home/heroes/hero_link.html' %}
                                 {% endfor %}
                             </div>
                             <div class="row el-element-overlay">
-                                {% for hero_page in page.dire_strength_heroes %}
+                                {% for hero_page in page.dire_intelligence_heroes %}
                                     {% include 'home/heroes/hero_link.html' %}
                                 {% endfor %}
                             </div>
