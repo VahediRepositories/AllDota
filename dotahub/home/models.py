@@ -14,17 +14,76 @@ class HomePage(Page):
 
 
 class HeroesPage(MetadataPageMixin, HeroesPageMixin, MultilingualPageMixin, Page):
-    promote_panels = Page.promote_panels + MetadataPageMixin.panels
+
+    @property
+    def radiant_strength_heroes(self):
+        return HeroPage.objects.live().filter(
+            hero__type__name='Strength',
+            hero__ego='Radiant'
+        )
+
+    @property
+    def dire_strength_heroes(self):
+        return HeroPage.objects.live().filter(
+            hero__type__name='Strength',
+            hero__ego='Dire'
+        )
+
+    @property
+    def radiant_agility_heroes(self):
+        return HeroPage.objects.live().filter(
+            hero__type__name='Agility',
+            hero__ego='Radiant'
+        )
+
+    @property
+    def dire_agility_heroes(self):
+        return HeroPage.objects.live().filter(
+            hero__type__name='Agility',
+            hero__ego='Dire'
+        )
+
+    @property
+    def radiant_intelligence_heroes(self):
+        return HeroPage.objects.live().filter(
+            hero__type__name='Intelligence',
+            hero__ego='Radiant'
+        )
+
+    @property
+    def dire_intelligence_heroes(self):
+        return HeroPage.objects.live().filter(
+            hero__type__name='Intelligence',
+            hero__ego='Dire'
+        )
+
+    promote_panels = []
+    settings_panels = []
 
     parent_page_types = ['home.HomePage']
     subpage_types = ['home.HeroPage']
+
+    def get_home_page(self):
+        return self.get_parent()
 
     @property
     def template(self):
         return self.get_language_template()
 
-    def get_home_page(self):
-        return self.get_parent()
+    def clean(self):
+        super().clean()
+        self.title = 'Heroes'
+        self.slug = slugify(self.title)
+
+    def serve(self, request, *args, **kwargs):
+        language = translation.get_language()
+        if language == 'fa':
+            self.search_description = 'تمام هيرو هاى دوتا 2'
+            self.seo_title = '{} - {}'.format('تمام هيرو هاى دوتا', 'All Dota2 Heroes')
+        else:
+            self.search_description = 'Every thing you need to know about Dota2 Heroes.'
+            self.seo_title = 'All Dota2 Heroes'
+        return super().serve(request, *args, **kwargs)
 
 
 class HeroPage(MetadataPageMixin, HeroesPageMixin, MultilingualPageMixin, Page):

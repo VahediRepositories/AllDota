@@ -1,13 +1,103 @@
 {% extends 'home/en/multilingual.html' %}
 
+{% load staticfiles %}
+{% load wagtailimages_tags %}
+{% load wagtailcore_tags %}
+
 {% block additional_css %}
+
+    <link href="{% static 'dotahub/dark/dist/css/pages/user-card.css' %}" rel="stylesheet">
+
+{% endblock %}
+
+{% block page_title %}
+
+{% endblock %}
+
+{% block breadcrumb %}
+
+    <li class="breadcrumb-item normal-p"><a href="{{ page.get_parent.get_url }}">Home</a></li>
+    <li class="breadcrumb-item active normal-p">Heroes</li>
 
 {% endblock %}
 
 {% block main_content %}
-
+    <div class="row">
+        <div class="col-md-4">
+            <div class="row">
+                <div class="col-lg-12 text-center" style="margin-top: 5%;">
+                    {% image page.strength_image width-33 height-33 as strength_img %}
+                    <img src="{{ strength_img.url }}" alt="{{ strength_img.alt }}">
+                    <h2 class="normal-h2">
+                        Strength
+                    </h2>
+                </div>
+            </div>
+            <hr>
+            <div class="row el-element-overlay">
+                {% for hero_page in page.radiant_strength_heroes %}
+                    {% include 'home/heroes/hero_link.html' %}
+                {% endfor %}
+            </div>
+            <hr>
+            <div class="row el-element-overlay">
+                {% for hero_page in page.dire_strength_heroes %}
+                    {% include 'home/heroes/hero_link.html' %}
+                {% endfor %}
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="row">
+                <div class="col-lg-12 text-center" style="margin-top: 5%;">
+                    {% image page.agility_image width-33 height-33 as agility_img %}
+                    <img src="{{ agility_img.url }}" alt="{{ agility_img.alt }}">
+                    <h2 class="normal-h2">
+                        Agility
+                    </h2>
+                </div>
+            </div>
+            <hr>
+            <div class="row el-element-overlay">
+                {% for hero_page in page.radiant_agility_heroes %}
+                    {% include 'home/heroes/hero_link.html' %}
+                {% endfor %}
+            </div>
+            <hr>
+            <div class="row el-element-overlay">
+                {% for hero_page in page.dire_agility_heroes %}
+                    {% include 'home/heroes/hero_link.html' %}
+                {% endfor %}
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="row">
+                <div class="col-lg-12 text-center" style="margin-top: 5%;">
+                    {% image page.intelligence_image width-33 height-33 as intelligence_img %}
+                    <img src="{{ intelligence_img.url }}" alt="{{ intelligence_img.alt }}">
+                    <h2 class="normal-h2">
+                        Intelligence
+                    </h2>
+                </div>
+            </div>
+            <hr>
+            <div class="row el-element-overlay">
+                {% for hero_page in page.radiant_intelligence_heroes %}
+                    {% include 'home/heroes/hero_link.html' %}
+                {% endfor %}
+            </div>
+            <hr>
+            <div class="row el-element-overlay">
+                {% for hero_page in page.dire_intelligence_heroes %}
+                    {% include 'home/heroes/hero_link.html' %}
+                {% endfor %}
+            </div>
+        </div>
+    </div>
 {% endblock %}
 
 {% block additional_js %}
+
+    <script src="{% static 'dotahub/assets/node_modules/Magnific-Popup-master/dist/jquery.magnific-popup.min.js' %}"></script>
+    <script src="{% static 'dotahub/assets/node_modules/Magnific-Popup-master/dist/jquery.magnific-popup-init.js' %}"></script>
 
 {% endblock %}

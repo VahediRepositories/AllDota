@@ -1,0 +1,21 @@
+{% load wagtailimages_tags %}
+
+<div class="col-lg-6">
+    <div class="el-card-item">
+        <div class="el-card-avatar el-overlay-1">
+            {% image hero_page.hero.horizontal_image fill-5000x3000 as hero_img %}
+            <img src="{{ hero_img.url }}" style="width: 100%; height: 100%;"
+                 alt="{{ hero_img.alt }}">
+            <div class="el-overlay">
+                <ul class="el-info">
+                    <li>
+                        <a href="{{ hero_page.get_url }}"
+                           class="btn default btn-outline">
+                            <i class="icon-magnifier"></i>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
