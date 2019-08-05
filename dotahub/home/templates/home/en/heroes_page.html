@@ -23,7 +23,7 @@
 
 {% block main_content %}
     <div class="row">
-        <div class="col-md-4">
+        <div class="col-md-4" style="padding-right: 5%; padding-left: 5%;">
             <div class="row">
                 <div class="col-lg-12 text-center" style="margin-top: 5%;">
                     {% image page.strength_image width-33 height-33 as strength_img %}
@@ -33,20 +33,18 @@
                     </h2>
                 </div>
             </div>
-            <hr>
             <div class="row el-element-overlay">
                 {% for hero_page in page.radiant_strength_heroes %}
                     {% include 'home/heroes/hero_link.html' %}
                 {% endfor %}
             </div>
-            <hr>
             <div class="row el-element-overlay">
                 {% for hero_page in page.dire_strength_heroes %}
                     {% include 'home/heroes/hero_link.html' %}
                 {% endfor %}
             </div>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-4" style="padding-right: 5%; padding-left: 5%;">
             <div class="row">
                 <div class="col-lg-12 text-center" style="margin-top: 5%;">
                     {% image page.agility_image width-33 height-33 as agility_img %}
@@ -56,20 +54,18 @@
                     </h2>
                 </div>
             </div>
-            <hr>
             <div class="row el-element-overlay">
                 {% for hero_page in page.radiant_agility_heroes %}
                     {% include 'home/heroes/hero_link.html' %}
                 {% endfor %}
             </div>
-            <hr>
             <div class="row el-element-overlay">
                 {% for hero_page in page.dire_agility_heroes %}
                     {% include 'home/heroes/hero_link.html' %}
                 {% endfor %}
             </div>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-4" style="padding-right: 5%; padding-left: 5%;">
             <div class="row">
                 <div class="col-lg-12 text-center" style="margin-top: 5%;">
                     {% image page.intelligence_image width-33 height-33 as intelligence_img %}
@@ -79,13 +75,11 @@
                     </h2>
                 </div>
             </div>
-            <hr>
             <div class="row el-element-overlay">
                 {% for hero_page in page.radiant_intelligence_heroes %}
                     {% include 'home/heroes/hero_link.html' %}
                 {% endfor %}
             </div>
-            <hr>
             <div class="row el-element-overlay">
                 {% for hero_page in page.dire_intelligence_heroes %}
                     {% include 'home/heroes/hero_link.html' %}
