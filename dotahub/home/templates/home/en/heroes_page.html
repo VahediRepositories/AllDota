@@ -24,6 +24,9 @@
 {% endblock %}
 
 {% block main_content %}
+
+    {% include 'home/heroes/selected_hero.html' %}
+
     <div class="row not-visible-small">
         <div class="col-md-4" style="padding-right: 5%; padding-left: 5%;">
             <div class="row">
@@ -206,5 +209,6 @@
 
     <script src="{% static 'dotahub/assets/node_modules/Magnific-Popup-master/dist/jquery.magnific-popup.min.js' %}"></script>
     <script src="{% static 'dotahub/assets/node_modules/Magnific-Popup-master/dist/jquery.magnific-popup-init.js' %}"></script>
+    {% include 'home/heroes/heroes_link_js.html' %}
 
 {% endblock %}

@@ -16,7 +16,9 @@
 </div>
 
 <div class="col-md-3 not-visible-small zoom" style="padding-left: 1%; padding-right: 1%;">
-    <div class="zoom">
+    <div class="zoom" id="{{ hero_page.hero.name }}-link"
+         data-name="{{ hero_page.hero.name }}"
+         data-hero-type="{{ hero_page.hero.type.name }}">
         <a href="{{ hero_page.get_url }}">
             {% image hero_page.hero.horizontal_image fill-5000x3000 as hero_img %}
             <img src="{{ hero_img.url }}" alt="{{ hero_img.alt }}"
@@ -26,3 +28,4 @@
 
 
 </div>
+

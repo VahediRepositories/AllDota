@@ -1,0 +1,19 @@
+<script>
+    $(document).ready(
+        function () {
+            var hero_links = $('.zoom');
+            var hero_name = $('#hero-name');
+            var hero_type = $('#hero-type');
+            hero_links.hover(
+                function () {
+
+                    hero_name.html($(this).attr('data-name'));
+                    hero_type.html($(this).attr('data-hero-type'));
+                },
+            );
+            var first_hero_link = hero_links.eq(1);
+            hero_name.html(first_hero_link.attr('data-name'));
+            hero_type.html(first_hero_link.attr('data-hero-type'));
+        }
+    );
+</script>
