@@ -85,6 +85,9 @@ class HeroesPage(MetadataPageMixin, HeroesPageMixin, MultilingualPageMixin, Page
             self.seo_title = 'All Dota2 Heroes'
         return super().serve(request, *args, **kwargs)
 
+    class Meta:
+        ordering = ('hero__name', )
+
 
 class HeroPage(MetadataPageMixin, HeroesPageMixin, MultilingualPageMixin, Page):
     hero = models.OneToOneField(
