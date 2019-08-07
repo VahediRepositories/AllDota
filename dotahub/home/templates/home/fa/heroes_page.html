@@ -9,6 +9,21 @@
     <link href="{% static 'dotahub/rtl/dist/css/pages/user-card.css' %}" rel="stylesheet">
     <link href="{% static 'dotahub/rtl/dist/css/pages/ui-bootstrap-page.css' %}" rel="stylesheet">
 
+    <style>
+        .zoom {
+            padding: 50px;
+            background-color: green;
+            transition: transform .2s; /* Animation */
+            width: 200px;
+            height: 200px;
+            margin: 0 auto;
+        }
+
+        .zoom:hover {
+            transform: scale(1.5); /* (150% zoom - Note: if the zoom is too large, it will go outside of the viewport) */
+        }
+    </style>
+
 {% endblock %}
 
 {% block page_title %}
