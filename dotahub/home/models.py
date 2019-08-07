@@ -137,6 +137,3 @@ class HeroPage(MetadataPageMixin, HeroesPageMixin, MultilingualPageMixin, Page):
     @property
     def template(self):
         return self.get_language_template()
-
-    class Meta:
-        ordering = ('hero', )

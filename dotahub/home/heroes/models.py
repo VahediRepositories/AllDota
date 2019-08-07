@@ -184,7 +184,7 @@ class Hero(models.Model):
         )
     )
 
-    biography = RichTextField(null=True, blank=True)
+    biography = RichTextField(null=True, blank=False)
     farsi_biography = RichTextField(null=True, blank=True)
 
     def get_intelligence(self):
