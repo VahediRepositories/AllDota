@@ -9,7 +9,7 @@
     <div class="row">
         <div class="col-lg-12">
             <h2 class="normal-p">
-                تنظيمات زبان
+                تنظيمات زبان:
             </h2>
         </div>
     </div>
@@ -27,7 +27,7 @@
         </div>
         <div class="col-lg-1"></div>
         <div class="col-lg-5">
-            <a href="{{ page.get_english_url }}" class="normal-p">
+            <a href="{{ page.get_english_url }}">
                 {% with english=page.get_english_language %}
                     {% image english.flag fill-4000x2500 as english_img %}
                     <img src="{{ english_img.url }}"
