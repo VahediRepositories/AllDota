@@ -187,6 +187,12 @@ class Hero(models.Model):
     biography = RichTextField(null=True, blank=False)
     farsi_biography = RichTextField(null=True, blank=True)
 
+    abilities = StreamField(
+        [
+            ('ability', HeroAbility())
+        ], null=True, blank=True
+    )
+
     def get_intelligence(self):
         return self.intelligence[0].value
 
@@ -248,6 +254,11 @@ class Hero(models.Model):
                 FieldPanel('biography'),
                 FieldPanel('farsi_biography')
             ], heading='Bio', classname='collapsible collapsed'
+        ),
+        MultiFieldPanel(
+            [
+                StreamFieldPanel('abilities')
+            ], heading='Abilities', classname='collapsible collapsed'
         )
     ]
 
