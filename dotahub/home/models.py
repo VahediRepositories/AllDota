@@ -91,15 +91,8 @@ class HeroPage(MetadataPageMixin, HeroesPageMixin, MultilingualPageMixin, Page):
         Hero, on_delete=models.SET_NULL, blank=False, null=True
     )
 
-    abilities = StreamField(
-        [
-            ('ability', HeroAbility())
-        ], null=True, blank=True
-    )
-
     content_panels = [
         SnippetChooserPanel('hero'),
-        StreamFieldPanel('abilities'),
     ]
 
     promote_panels = []
