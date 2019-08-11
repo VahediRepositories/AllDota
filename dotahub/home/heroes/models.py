@@ -265,5 +265,21 @@ class Hero(models.Model):
     def __str__(self):
         return self.name
 
+    def save(self, *args, **kwargs):
+        if self.name:
+            hero_img_title = 'Dota 2 Hero named {}'.format(self.name)
+            self.horizontal_image.title = hero_img_title
+            self.horizontal_image.save()
+            self.vertical_image.title = hero_img_title
+            self.vertical_image.save()
+            for ability in self.abilities:
+                ability = ability.value
+                if ability['name']:
+                    ability['image'].title = "{} ability of {}".format(
+                        ability['name'], self.name
+                    )
+                    ability['image'].save()
+        super(Hero, self).save()
+
     class Meta:
         ordering = ('name', )
