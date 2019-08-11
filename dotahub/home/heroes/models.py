@@ -193,6 +193,8 @@ class Hero(models.Model):
         ], null=True, blank=True
     )
 
+    farsi_translated = models.BooleanField(default=False)
+
     def get_intelligence(self):
         return self.intelligence[0].value
 
@@ -259,6 +261,11 @@ class Hero(models.Model):
             [
                 StreamFieldPanel('abilities')
             ], heading='Abilities', classname='collapsible collapsed'
+        ),
+        MultiFieldPanel(
+            [
+                FieldPanel('farsi_translated')
+            ], heading='Translations', classname='collapsible collapsed'
         )
     ]
 

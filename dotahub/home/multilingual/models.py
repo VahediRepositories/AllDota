@@ -22,10 +22,17 @@ class MultilingualPageMixin:
     def english_template(self):
         return 'home/en/' + self.convert(self.__class__.__name__) + '.html'
 
-    def get_language_template(self):
+    @property
+    def farsi_not_translated_template(self):
+        return 'home/fa/not_translated/' + self.convert(self.__class__.__name__) + '.html'
+
+    def get_language_template(self, farsi_translated=True):
         language = translation.get_language()
         if language == 'fa':
-            return self.farsi_template
+            if not farsi_translated:
+                return self.farsi_not_translated_template
+            else:
+                return self.farsi_template
         else:
             return self.english_template
 
