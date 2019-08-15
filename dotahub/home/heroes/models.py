@@ -8,6 +8,7 @@ from wagtail.snippets.blocks import SnippetChooserBlock
 from wagtail.snippets.edit_handlers import SnippetChooserPanel
 from wagtail.snippets.models import register_snippet
 
+from ..modules import wagtail_images
 from .blocks import *
 
 
@@ -275,18 +276,17 @@ class Hero(models.Model):
     def save(self, *args, **kwargs):
         if self.name:
             hero_img_title = 'Dota 2 Hero named {}'.format(self.name)
-            self.horizontal_image.title = hero_img_title
-            self.horizontal_image.save()
-            self.vertical_image.title = hero_img_title
-            self.vertical_image.save()
+            wagtail_images.set_title(self.horizontal_image, hero_img_title)
+            wagtail_images.set_title(self.vertical_image, hero_img_title)
             for ability in self.abilities:
                 ability = ability.value
                 if ability['name']:
-                    ability['image'].title = "{} ability of {}".format(
+                    ability_img_title = "{} ability of {}".format(
                         ability['name'], self.name
                     )
-                    ability['image'].save()
+                    wagtail_images.set_title(ability['image'], ability_img_title)
         super(Hero, self).save()
 
     class Meta:
         ordering = ('name', )
+        verbose_name_plural = 'Heroes'
