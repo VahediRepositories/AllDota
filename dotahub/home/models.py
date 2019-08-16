@@ -130,3 +130,7 @@ class HeroPage(MetadataPageMixin, HeroesPageMixin, MultilingualPageMixin, Page):
     @property
     def template(self):
         return self.get_language_template(self.hero.farsi_translated)
+
+
+# class Dota2Introduction(MetadataPageMixin, MultilingualPageMixin, Page):
+
