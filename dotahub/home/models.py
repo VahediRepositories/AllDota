@@ -177,6 +177,9 @@ class Dota2IntroductionPage(MetadataPageMixin, MultilingualPageMixin, Page):
         self.title = 'Dota2 Introduction'
         self.slug = slugify(self.title)
 
+    def get_home_page(self):
+        return self.get_parent()
+
     @property
     def template(self):
         return self.get_language_template(self.farsi_translated)
