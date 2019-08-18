@@ -2,6 +2,7 @@ from django.utils.text import slugify
 from wagtail.core.models import Page
 from wagtailmetadata.models import MetadataPageMixin
 
+from .blocks import *
 from .heroes.blocks import *
 from .heroes.models import *
 from .multilingual.models import *
@@ -9,7 +10,8 @@ from .multilingual.models import *
 
 class HomePage(Page):
     subpage_types = [
-        'home.HeroesPage'
+        'home.HeroesPage',
+        'home.Dota2IntroductionPage',
     ]
 
 
@@ -132,5 +134,49 @@ class HeroPage(MetadataPageMixin, HeroesPageMixin, MultilingualPageMixin, Page):
         return self.get_language_template(self.hero.farsi_translated)
 
 
-# class Dota2Introduction(MetadataPageMixin, MultilingualPageMixin, Page):
+class Dota2IntroductionPage(MetadataPageMixin, MultilingualPageMixin, Page):
+    sections = StreamField(
+        [
+            ('section', IntroductionSection())
+        ], null=True, blank=True
+    )
 
+    farsi_translated = models.BooleanField(default=False)
+
+    content_panels = [
+        MultiFieldPanel(
+            [
+                StreamFieldPanel('sections'),
+            ], heading='sections', classname='collapsible collapsed'
+        ),
+        MultiFieldPanel(
+            [
+                FieldPanel('farsi_translated')
+            ], heading='Translations', classname='collapsible collapsed'
+        )
+    ]
+
+    promote_panels = []
+    settings_panels = []
+
+    parent_page_types = ['home.HomePage']
+    subpage_types = []
+
+    def serve(self, request, *args, **kwargs):
+        language = translation.get_language()
+        if language == 'fa':
+            self.search_description = 'محبوب ترين بازى استيم. هر روز ميليون ها بازيكن از سراسر جهان، با انتخاب يكى از هيروها وارد نبرد ميشوند. مهم نيست مبتدى باشيد يا حرفه اى. هميشه چيزى براى كشف كردن هست.'
+            self.seo_title = 'Dota2 - رايگان بازى كنيد'
+        else:
+            self.search_description = "The most-played game on Steam. Every day, millions of players worldwide enter battle as one of over a hundred Dota heroes. And no matter if it's their 10th hour of play or 1,000th, there's always something new to discover."
+            self.seo_title = 'Dota2 - Play for Free'
+        return super().serve(request, *args, **kwargs)
+
+    def clean(self):
+        super().clean()
+        self.title = 'Dota2 Introduction'
+        self.slug = slugify(self.title)
+
+    @property
+    def template(self):
+        return self.get_language_template(self.farsi_translated)

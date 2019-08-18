@@ -1,0 +1,95 @@
+{% extends 'home/en/multilingual.html' %}
+
+{% load wagtailimages_tags %}
+
+{% block additional_css %}
+
+{% endblock %}
+
+{% block page_title %}
+
+{% endblock %}
+
+{% block breadcrumb %}
+
+    <li class="breadcrumb-item normal-p"><a href="{{ page.get_home_page.get_url }}">Home</a></li>
+    <li class="breadcrumb-item active normal-p">Introduction</li>
+
+{% endblock %}
+
+{% block main_content %}
+
+    {% for section in page.sections %}
+        {% image section.value.background fill-3000x2000 as background %}
+        <div class="row row-flex">
+            {% if section.value.text_place == 'right' %}
+                <div class="col-lg-7 col-md-12">
+                    <div class="card text-center" style="height: 100%; margin-bottom: 0%;">
+                        <div style="padding: 10%;">
+                            <img src="{{ background.url }}"
+                                 class="card-img-top img-responsive"
+                                 alt="{{ background.alt }}">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-5 col-md-12">
+                    <div class="card"
+                         style="height: 100%;">
+                        <div class="card-body" style="padding-top: 5%; padding-left: 10%; padding-right: 10%;">
+                            <div class="normal-h2">
+                                {{ section.value.title }}
+                            </div>
+                            <br>
+                            <div class="normal-p">
+                                {{ section.value.description }}
+                            </div>
+                            <br>
+                            <div class="normal-p">
+                                {{ section.value.quotation.text }}
+                            </div>
+                            <div class="small-p">
+                                {{ section.value.quotation.name }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% else %}
+                <div class="col-lg-5 col-md-12">
+                    <div class="card"
+                         style="height: 100%;">
+                        <div class="card-body" style="padding-top: 5%; padding-left: 10%; padding-right: 10%;">
+                            <div class="normal-h2">
+                                {{ section.value.title }}
+                            </div>
+                            <br>
+                            <div class="normal-p">
+                                {{ section.value.description }}
+                            </div>
+                            <br>
+                            <div class="normal-p">
+                                {{ section.value.quotation.text }}
+                            </div>
+                            <div class="small-p">
+                                {{ section.value.quotation.name }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-7 col-md-12">
+                    <div class="card text-center" style="height: 100%; margin-bottom: 0%;">
+                        <div style="padding: 10%;">
+                            <img src="{{ background.url }}"
+                                 class="card-img-top img-responsive"
+                                 alt="{{ background.alt }}">
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    {% endfor %}
+
+{% endblock %}
+
+{% block additional_js %}
+
+{% endblock %}
