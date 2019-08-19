@@ -9,11 +9,6 @@ from wagtail.snippets.models import register_snippet
 
 class MultilingualPageMixin:
 
-    @staticmethod
-    def convert(name):
-        s1 = re.sub('(.)([A-Z][a-z]+)', r'\1_\2', name)
-        return re.sub('([a-z0-9])([A-Z])', r'\1_\2', s1).lower()
-
     @property
     def farsi_template(self):
         return 'home/fa/' + self.convert(self.__class__.__name__) + '.html'
@@ -26,9 +21,13 @@ class MultilingualPageMixin:
     def farsi_not_translated_template(self):
         return 'home/fa/not_translated/' + self.convert(self.__class__.__name__) + '.html'
 
+    @property
+    def language(self):
+        return translation.get_language()
+
     def get_language_template(self, farsi_translated=True):
-        language = translation.get_language()
-        if language == 'fa':
+        lang = translation.get_language()
+        if lang == 'fa':
             if not farsi_translated:
                 return self.farsi_not_translated_template
             else:
@@ -56,6 +55,22 @@ class MultilingualPageMixin:
     @staticmethod
     def get_english_language():
         return Language.objects.get(name='English')
+
+    @staticmethod
+    def convert(name):
+        s1 = re.sub('(.)([A-Z][a-z]+)', r'\1_\2', name)
+        return re.sub('([a-z0-9])([A-Z])', r'\1_\2', s1).lower()
+
+    @staticmethod
+    def get_language_dir(farsi_translated=True):
+        lang = translation.get_language()
+        if lang == 'fa':
+            if not farsi_translated:
+                return 'ltr'
+            else:
+                return 'rtl'
+        else:
+            return 'ltr'
 
 
 @register_snippet

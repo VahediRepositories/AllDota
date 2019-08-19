@@ -183,3 +183,7 @@ class Dota2IntroductionPage(MetadataPageMixin, MultilingualPageMixin, Page):
     @property
     def template(self):
         return self.get_language_template(self.farsi_translated)
+
+    @property
+    def language_dir(self):
+        return MultilingualPageMixin.get_language_dir()

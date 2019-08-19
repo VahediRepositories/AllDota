@@ -1,0 +1,40 @@
+<div class="col-lg-5 col-md-12">
+    <div class="card"
+         style="height: 100%;">
+        <div style="height: 100%; display: table; padding-top: 5%; padding-left: 10%; padding-right: 10%;">
+            <div style="display: table-cell; vertical-align: middle;" class="text-center">
+                <div class="normal-h2">
+                    {% if page.language == 'fa' and page.farsi_translated %}
+                        {{ section.farsi_title }}
+                    {% else %}
+                        {{ section.title }}
+                    {% endif %}
+                </div>
+                <br>
+                <div class="normal-p">
+                    {% if page.language == 'fa' and page.farsi_translated %}
+                        {{ section.farsi_description }}
+                    {% else %}
+                        {{ section.description }}
+                    {% endif %}
+                </div>
+                <br>
+                <div class="normal-p">
+                    {% if page.language == 'fa' and page.farsi_translated %}
+                        {{ section.quotation.farsi_text }}
+                    {% else %}
+                        {{ section.quotation.text }}
+                    {% endif %}
+                </div>
+                <div class="small-p">
+                    {% if page.language == 'fa' and page.farsi_translated %}
+                        {{ section.quotation.farsi_name }}
+                    {% else %}
+                        {{ section.quotation.name }}
+                    {% endif %}
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
