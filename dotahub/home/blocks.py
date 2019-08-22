@@ -1,12 +1,13 @@
 from wagtail.core import blocks
 from wagtail.images.blocks import ImageChooserBlock
+from . import configuration
 
 
 class QuotationBlock(blocks.StructBlock):
     name = blocks.CharBlock(max_length=70)
     farsi_name = blocks.CharBlock(max_length=70, required=False)
-    text = blocks.RichTextBlock()
-    farsi_text = blocks.RichTextBlock(required=False)
+    text = blocks.RichTextBlock(features=configuration.RICHTEXT_FEATURES)
+    farsi_text = blocks.RichTextBlock(required=False, features=configuration.RICHTEXT_FEATURES)
 
 
 class IntroductionSection(blocks.StructBlock):
@@ -19,10 +20,10 @@ class IntroductionSection(blocks.StructBlock):
         ],
     )
 
-    title = blocks.RichTextBlock()
-    farsi_title = blocks.RichTextBlock(required=False)
+    title = blocks.RichTextBlock(features=configuration.RICHTEXT_FEATURES)
+    farsi_title = blocks.RichTextBlock(required=False, features=configuration.RICHTEXT_FEATURES)
 
-    description = blocks.RichTextBlock()
-    farsi_description = blocks.RichTextBlock(required=False)
+    description = blocks.RichTextBlock(features=configuration.RICHTEXT_FEATURES)
+    farsi_description = blocks.RichTextBlock(required=False, features=configuration.RICHTEXT_FEATURES)
 
     quotation = QuotationBlock()
