@@ -10,7 +10,7 @@ from wagtail.snippets.models import register_snippet
 
 from ..modules import wagtail_images
 from .blocks import *
-from .. import configuration
+from .. import configurations
 
 
 class HeroPropertyImage(models.Model):
@@ -187,10 +187,10 @@ class Hero(models.Model):
     )
 
     biography = RichTextField(
-        null=True, blank=False, features=configuration.RICHTEXT_FEATURES
+        null=True, blank=False, features=configurations.RICHTEXT_FEATURES
     )
     farsi_biography = RichTextField(
-        null=True, blank=True, features=configuration.RICHTEXT_FEATURES
+        null=True, blank=True, features=configurations.RICHTEXT_FEATURES
     )
 
     abilities = StreamField(

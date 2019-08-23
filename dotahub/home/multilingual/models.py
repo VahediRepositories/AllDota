@@ -70,7 +70,7 @@ class MultilingualPageMixin:
 
     @property
     def english_template(self):
-        return 'home/en/' + self.convert(self.__class__.__name__) + '.html'
+        return 'home/en/' + self.template_name + '.html'
 
     def get_language_url(self, lang):
         current_lang = translation.get_language()

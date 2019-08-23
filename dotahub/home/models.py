@@ -2,7 +2,7 @@ from django.utils.text import slugify
 from wagtail.core.models import Page
 from wagtailmetadata.models import MetadataPageMixin
 
-from .blocks import *
+from .introduction.blocks import *
 from .heroes.blocks import *
 from .heroes.models import *
 from .multilingual.models import *
