@@ -1,0 +1,17 @@
+{% load wagtailcore_tags %}
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-body" style="padding: 10%;">
+                <div class="normal-p">
+                    {% if page.template_language == 'fa' %}
+                        {{ page.hero.farsi_biography|richtext }}
+                    {% else %}
+                        {{ page.hero.biography|richtext }}
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

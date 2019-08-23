@@ -1,0 +1,155 @@
+{% load wagtailimages_tags %}
+
+<div class="row">
+    <div class="col-md-12">
+        <table style="width: 100%; height: 100%;">
+            <tr>
+
+                <td class="text-center"
+                    data-toggle="tooltip"
+                    title="Intelligence"
+                    style="vertical-align: middle;">
+                    {% image page.intelligence_image width-33 height-33 as intelligence_img %}
+                    <img src="{{ intelligence_img.url }}"
+                         alt="{{ intelligence_img.alt }}">
+                </td>
+                <td class="text-center"
+                    nowrap=""
+                    style="vertical-align: middle; font-size: medium" dir="ltr">
+                    {{ page.hero.get_intelligence.base }}
+                    +
+                    {{ page.hero.get_intelligence.per_level }}
+                </td>
+
+                <td class="text-center"
+                    data-toggle="tooltip"
+                    title="Damage"
+                    style="vertical-align: middle;">
+                    {% image page.damage_image width-33 height-33 as damage_img %}
+                    <img src="{{ damage_img.url }}"
+                         alt="{{ damage_img.alt }}">
+                </td>
+                <td class="text-center"
+                    nowrap=""
+                    style="vertical-align: middle; font-size: medium;" dir="ltr">
+                    {{ page.hero.get_damage.min }}
+                    -
+                    {{ page.hero.get_damage.max }}
+                </td>
+
+            </tr>
+            <tr>
+
+                <td class="text-center"
+                    data-toggle="tooltip"
+                    title="Agility"
+                    style="vertical-align: middle;">
+                    {% image page.agility_image width-33 height-33 as agility_img %}
+                    <img src="{{ agility_img.url }}"
+                         alt="{{ agility_img.alt }}">
+                </td>
+                <td class="text-center"
+                    nowrap=""
+                    style="vertical-align: middle; font-size: medium" dir="ltr">
+                    {{ page.hero.get_agility.base }}
+                    +
+                    {{ page.hero.get_agility.per_level }}
+                </td>
+
+                <td class="text-center"
+                    data-toggle="tooltip"
+                    title="Move Speed"
+                    style="vertical-align: middle;">
+                    {% image page.move_speed_image width-55 height-55 as move_speed_img %}
+                    <img src="{{ move_speed_img.url }}"
+                         alt="{{ move_speed_img.alt }}">
+                </td>
+                <td class="text-center"
+                    nowrap=""
+                    style="vertical-align: middle; font-size: medium" dir="ltr">
+                    {{ page.hero.get_move_speed.speed }}
+                </td>
+
+            </tr>
+            <tr>
+
+                <td class="text-center"
+                    data-toggle="tooltip"
+                    title="Strength"
+                    style="vertical-align: middle;">
+                    {% image page.strength_image width-33 height-33 as strength_img %}
+                    <img src="{{ strength_img.url }}"
+                         alt="{{ strength_img.alt }}">
+                </td>
+                <td class="text-center"
+                    nowrap=""
+                    style="vertical-align: middle; font-size: medium" dir="ltr">
+                    {{ page.hero.get_strength.base }}
+                    +
+                    {{ page.hero.get_strength.per_level }}
+                </td>
+
+                <td class="text-center"
+                    data-toggle="tooltip"
+                    title="Armor"
+                    style="vertical-align: middle;">
+                    {% image page.armor_image width-55 height-55 as armor_img %}
+                    <img src="{{ armor_img.url }}"
+                         alt="{{ armor_img.alt }}">
+                </td>
+                <td class="text-center"
+                    nowrap=""
+                    style="vertical-align: middle; font-size: medium" dir="ltr">
+                    {{ page.hero.get_armor.armor }}
+                </td>
+
+            </tr>
+        </table>
+    </div>
+</div>
+
+<hr>
+
+<div class="row text-center">
+    <div class="col-md-12">
+        <h2 class="normal-h2">
+            {{ page.hero.name }}
+        </h2>
+    </div>
+</div>
+<div class="row text-center">
+    <div class="col-md-12">
+        <h4 class="normal-h4">
+            Hero Type: {{ page.hero.type }}
+        </h4>
+    </div>
+</div>
+
+<div class="row text-center">
+    <div class="col-md-12">
+        <h4 class="normal-h4">
+            Attack Type:
+            {% for attack_type in page.hero.attack_types.all %}
+                {{ attack_type }}
+                {% if not forloop.last %}
+                    -
+                {% endif %}
+            {% endfor %}
+        </h4>
+    </div>
+</div>
+
+<div class="row text-center">
+    <div class="col-md-12">
+        <p class="normal-p">
+            {% for role in page.hero.roles %}
+                {{ role }}
+                {% if not forloop.last %}
+                    -
+                {% endif %}
+
+            {% endfor %}
+        </p>
+
+    </div>
+</div>

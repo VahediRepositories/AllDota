@@ -1,0 +1,8 @@
+{% load wagtailimages_tags %}
+
+<div style="padding-right: 20%; padding-left: 20%; padding-top: 20%;">
+    {% image page.hero.vertical_image fill-3000x4000 as image %}
+    <img src="{{ image.url }}"
+         class="card-img-top img-responsive"
+         alt="{{ image.alt }}">
+</div>

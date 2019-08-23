@@ -3,10 +3,10 @@
 {% with section=section.value %}
     {% image section.background fill-3000x2000 as background %}
     <div class="row row-flex">
-        {% if section.text_place == 'right' and page.language_dir == 'ltr' or section.text_place == 'left' and page.language_dir == 'rtl' %}
+        {% if section.text_place == 'right' and page.template_language_dir == 'ltr' or section.text_place == 'left' and page.template_language_dir == 'rtl' %}
             {% include 'home/introduction/section_image.html' %}
             {% include 'home/introduction/section_description.html' %}
-        {% elif section.text_place == 'left' and page.language_dir == 'ltr' or section.text_place == 'right' and page.language_dir == 'rtl' %}
+        {% elif section.text_place == 'left' and page.template_language_dir == 'ltr' or section.text_place == 'right' and page.template_language_dir == 'rtl' %}
             {% include 'home/introduction/section_description.html' %}
             {% include 'home/introduction/section_image.html' %}
         {% endif %}

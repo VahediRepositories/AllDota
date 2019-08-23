@@ -68,10 +68,6 @@ class HeroesPage(MetadataPageMixin, HeroesPageMixin, MultilingualPageMixin, Page
     def get_home_page(self):
         return self.get_parent()
 
-    @property
-    def template(self):
-        return self.get_language_template()
-
     def clean(self):
         super().clean()
         self.title = 'Heroes'
@@ -86,6 +82,14 @@ class HeroesPage(MetadataPageMixin, HeroesPageMixin, MultilingualPageMixin, Page
             self.search_description = 'Every thing you need to know about Dota2 Heroes.'
             self.seo_title = 'All Dota2 Heroes'
         return super().serve(request, *args, **kwargs)
+
+    @property
+    def template(self):
+        return super().template
+
+    @property
+    def farsi_translated(self):
+        return True
 
 
 class HeroPage(MetadataPageMixin, HeroesPageMixin, MultilingualPageMixin, Page):
@@ -130,8 +134,12 @@ class HeroPage(MetadataPageMixin, HeroesPageMixin, MultilingualPageMixin, Page):
         self.search_image = self.hero.horizontal_image
 
     @property
+    def farsi_translated(self):
+        return self.hero.farsi_translated
+
+    @property
     def template(self):
-        return self.get_language_template(self.hero.farsi_translated)
+        return super().template
 
 
 class Dota2IntroductionPage(MetadataPageMixin, MultilingualPageMixin, Page):
@@ -182,8 +190,6 @@ class Dota2IntroductionPage(MetadataPageMixin, MultilingualPageMixin, Page):
 
     @property
     def template(self):
-        return self.get_language_template(self.farsi_translated)
+        return super().template
 
-    @property
-    def language_dir(self):
-        return MultilingualPageMixin.get_language_dir(self.farsi_translated)
+

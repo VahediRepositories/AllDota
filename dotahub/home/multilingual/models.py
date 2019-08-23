@@ -10,37 +10,19 @@ from wagtail.snippets.models import register_snippet
 class MultilingualPageMixin:
 
     @property
-    def farsi_template(self):
-        return 'home/fa/' + self.convert(self.__class__.__name__) + '.html'
-
-    @property
-    def english_template(self):
-        return 'home/en/' + self.convert(self.__class__.__name__) + '.html'
-
-    @property
-    def farsi_not_translated_template(self):
-        return 'home/fa/not_translated/' + self.convert(self.__class__.__name__) + '.html'
-
-    @property
-    def language(self):
-        return translation.get_language()
-
-    def get_language_template(self, farsi_translated=True):
+    def template(self):
         lang = translation.get_language()
         if lang == 'fa':
-            if not farsi_translated:
-                return self.farsi_not_translated_template
+            if not self.farsi_translated:
+                return self.english_template
             else:
                 return self.farsi_template
         else:
             return self.english_template
 
-    def get_language_url(self, lang):
-        current_lang = translation.get_language()
-        translation.activate(lang)
-        url = self.get_url()
-        translation.activate(current_lang)
-        return url
+    @property
+    def language(self):
+        return translation.get_language()
 
     def get_farsi_url(self):
         return self.get_language_url('fa')
@@ -56,21 +38,51 @@ class MultilingualPageMixin:
     def get_english_language():
         return Language.objects.get(name='English')
 
-    @staticmethod
-    def convert(name):
-        s1 = re.sub('(.)([A-Z][a-z]+)', r'\1_\2', name)
-        return re.sub('([a-z0-9])([A-Z])', r'\1_\2', s1).lower()
-
-    @staticmethod
-    def get_language_dir(farsi_translated=True):
+    @property
+    def template_language_dir(self):
         lang = translation.get_language()
         if lang == 'fa':
-            if not farsi_translated:
+            if not self.farsi_translated:
                 return 'ltr'
             else:
                 return 'rtl'
         else:
             return 'ltr'
+
+    @property
+    def template_language(self):
+        lang = translation.get_language()
+        if lang == 'fa':
+            if not self.farsi_translated:
+                return 'en'
+            else:
+                return 'fa'
+        else:
+            return 'en'
+
+    @property
+    def template_name(self):
+        return self.convert(self.__class__.__name__)
+
+    @property
+    def farsi_template(self):
+        return 'home/fa/' + self.template_name + '.html'
+
+    @property
+    def english_template(self):
+        return 'home/en/' + self.convert(self.__class__.__name__) + '.html'
+
+    def get_language_url(self, lang):
+        current_lang = translation.get_language()
+        translation.activate(lang)
+        url = self.get_url()
+        translation.activate(current_lang)
+        return url
+
+    @staticmethod
+    def convert(name):
+        s1 = re.sub('(.)([A-Z][a-z]+)', r'\1_\2', name)
+        return re.sub('([a-z0-9])([A-Z])', r'\1_\2', s1).lower()
 
 
 @register_snippet

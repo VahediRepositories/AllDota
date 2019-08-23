@@ -1,0 +1,47 @@
+{% load wagtailimages_tags %}
+{% load wagtailcore_tags %}
+
+<div class="row">
+
+    <div class="col-md-3">
+        <div class="text-center" style="padding: 10%;">
+            {% image ability.value.image width-90 height-90 as ability_img %}
+            <img src="{{ ability_img.url }}"
+                 class="img-thumbnail"
+                 alt="{{ ability_img.alt }}">
+        </div>
+    </div>
+    <div class="col-md-9">
+        <p class="normal-p not-visible-small">
+            {% if page.template_language == 'fa' %}
+                {{ ability.value.farsi_name }}
+            {% else %}
+                {{ ability.value.name }}
+            {% endif %}
+        </p>
+        <p class="normal-p text-center not-visible-big">
+            {% if page.template_language == 'fa' %}
+                {{ ability.value.farsi_name }}
+            {% else %}
+                {{ ability.value.name }}
+            {% endif %}
+        </p>
+        <div class="x-small-p not-visible-small">
+            {% if page.template_language == 'fa' %}
+                {{ ability.value.farsi_summary|richtext }}
+            {% else %}
+                {{ ability.value.summary|richtext }}
+            {% endif %}
+        </div>
+        <div class="x-small-p text-center not-visible-big">
+            {% if page.template_language == 'fa' %}
+                {{ ability.value.farsi_summary|richtext }}
+            {% else %}
+                {{ ability.value.summary|richtext }}
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% if not forloop.last %}
+    <hr>
+{% endif %}
