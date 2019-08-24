@@ -200,6 +200,7 @@ class Hero(models.Model):
     )
 
     farsi_translated = models.BooleanField(default=False)
+    english_translated = models.BooleanField(default=False)
 
     def get_intelligence(self):
         return self.intelligence[0].value
@@ -270,7 +271,8 @@ class Hero(models.Model):
         ),
         MultiFieldPanel(
             [
-                FieldPanel('farsi_translated')
+                FieldPanel('farsi_translated'),
+                FieldPanel('english_translated')
             ], heading='Translations', classname='collapsible collapsed'
         )
     ]

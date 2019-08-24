@@ -13,12 +13,15 @@ class MultilingualPageMixin:
     def template(self):
         lang = translation.get_language()
         if lang == 'fa':
-            if not self.farsi_translated:
-                return self.english_template
-            else:
+            if self.farsi_translated:
                 return self.farsi_template
-        else:
-            return self.english_template
+            elif self.english_translated:
+                return self.english_template
+        elif lang == 'en':
+            if self.english_translated:
+                return self.english_template
+            elif self.farsi_translated:
+                return self.farsi_template
 
     @property
     def language(self):
@@ -39,38 +42,41 @@ class MultilingualPageMixin:
         return Language.objects.get(name='English')
 
     @property
-    def template_language_dir(self):
-        lang = translation.get_language()
-        if lang == 'fa':
-            if not self.farsi_translated:
-                return 'ltr'
-            else:
-                return 'rtl'
-        else:
-            return 'ltr'
-
-    @property
     def template_language(self):
         lang = translation.get_language()
         if lang == 'fa':
-            if not self.farsi_translated:
-                return 'en'
-            else:
+            if self.farsi_translated:
                 return 'fa'
-        else:
-            return 'en'
+            elif self.english_translated:
+                return 'en'
+        elif lang == 'en':
+            if self.english_translated:
+                return 'en'
+            elif self.farsi_translated:
+                return 'fa'
+
+    @property
+    def template_language_dir(self):
+        if self.template_language == 'fa':
+            return 'rtl'
+        elif self.template_language == 'en':
+            return 'ltr'
+
+    @property
+    def farsi_template(self):
+        return 'home/fa/' + self.template_file
+
+    @property
+    def english_template(self):
+        return 'home/en/' + self.template_file
 
     @property
     def template_name(self):
         return self.convert(self.__class__.__name__)
 
     @property
-    def farsi_template(self):
-        return 'home/fa/' + self.template_name + '.html'
-
-    @property
-    def english_template(self):
-        return 'home/en/' + self.template_name + '.html'
+    def template_file(self):
+        return self.template_name + '.html'
 
     def get_language_url(self, lang):
         current_lang = translation.get_language()

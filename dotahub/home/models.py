@@ -91,6 +91,10 @@ class HeroesPage(MetadataPageMixin, HeroesPageMixin, MultilingualPageMixin, Page
     def farsi_translated(self):
         return True
 
+    @property
+    def english_translated(self):
+        return True
+
 
 class HeroPage(MetadataPageMixin, HeroesPageMixin, MultilingualPageMixin, Page):
     hero = models.OneToOneField(
@@ -134,12 +138,16 @@ class HeroPage(MetadataPageMixin, HeroesPageMixin, MultilingualPageMixin, Page):
         self.search_image = self.hero.horizontal_image
 
     @property
+    def template(self):
+        return super().template
+
+    @property
     def farsi_translated(self):
         return self.hero.farsi_translated
 
     @property
-    def template(self):
-        return super().template
+    def english_translated(self):
+        return self.hero.english_translated
 
 
 class Dota2IntroductionPage(MetadataPageMixin, MultilingualPageMixin, Page):
@@ -150,6 +158,7 @@ class Dota2IntroductionPage(MetadataPageMixin, MultilingualPageMixin, Page):
     )
 
     farsi_translated = models.BooleanField(default=False)
+    english_translated = models.BooleanField(default=False)
 
     content_panels = [
         MultiFieldPanel(
@@ -159,7 +168,8 @@ class Dota2IntroductionPage(MetadataPageMixin, MultilingualPageMixin, Page):
         ),
         MultiFieldPanel(
             [
-                FieldPanel('farsi_translated')
+                FieldPanel('farsi_translated'),
+                FieldPanel('english_translated')
             ], heading='Translations', classname='collapsible collapsed'
         )
     ]
@@ -191,5 +201,3 @@ class Dota2IntroductionPage(MetadataPageMixin, MultilingualPageMixin, Page):
     @property
     def template(self):
         return super().template
-
-

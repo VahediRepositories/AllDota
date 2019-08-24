@@ -4,32 +4,32 @@
         <div style="height: 100%; display: table; padding-top: 5%; padding-left: 10%; padding-right: 10%;">
             <div style="display: table-cell; vertical-align: middle;" class="text-center">
                 <div class="normal-h2">
-                    {% if page.language == 'fa' and page.farsi_translated %}
+                    {% if page.template_language == 'fa' %}
                         {{ section.farsi_title }}
-                    {% else %}
+                    {% elif page.template_language == 'en' %}
                         {{ section.title }}
                     {% endif %}
                 </div>
                 <br>
                 <div class="normal-p">
-                    {% if page.language == 'fa' and page.farsi_translated %}
+                    {% if page.template_language == 'fa' %}
                         {{ section.farsi_description }}
-                    {% else %}
+                    {% elif page.template_language == 'en' %}
                         {{ section.description }}
                     {% endif %}
                 </div>
                 <br>
                 <div class="normal-p">
-                    {% if page.language == 'fa' and page.farsi_translated %}
+                    {% if page.template_language == 'fa' %}
                         {{ section.quotation.farsi_text }}
-                    {% else %}
+                    {% elif page.template_language == 'en' %}
                         {{ section.quotation.text }}
                     {% endif %}
                 </div>
                 <div class="small-p">
-                    {% if page.language == 'fa' and page.farsi_translated %}
+                    {% if page.template_language == 'fa' %}
                         {{ section.quotation.farsi_name }}
-                    {% else %}
+                    {% elif page.template_language == 'en' %}
                         {{ section.quotation.name }}
                     {% endif %}
                 </div>

@@ -7,7 +7,7 @@
                 <div class="normal-p">
                     {% if page.template_language == 'fa' %}
                         {{ page.hero.farsi_biography|richtext }}
-                    {% else %}
+                    {% elif page.template_language == 'en' %}
                         {{ page.hero.biography|richtext }}
                     {% endif %}
                 </div>
