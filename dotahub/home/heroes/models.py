@@ -58,27 +58,27 @@ class HeroPropertyImage(models.Model):
 class HeroesPageMixin:
     @property
     def intelligence_image(self):
-        return HeroPropertyImage.objects.all()[0].intelligence
+        return HeroPropertyImage.objects.first().intelligence
 
     @property
     def agility_image(self):
-        return HeroPropertyImage.objects.all()[0].agility
+        return HeroPropertyImage.objects.first().agility
 
     @property
     def strength_image(self):
-        return HeroPropertyImage.objects.all()[0].strength
+        return HeroPropertyImage.objects.first().strength
 
     @property
     def damage_image(self):
-        return HeroPropertyImage.objects.all()[0].damage
+        return HeroPropertyImage.objects.first().damage
 
     @property
     def move_speed_image(self):
-        return HeroPropertyImage.objects.all()[0].move_speed
+        return HeroPropertyImage.objects.first().move_speed
 
     @property
     def armor_image(self):
-        return HeroPropertyImage.objects.all()[0].armor
+        return HeroPropertyImage.objects.first().armor
 
 
 class HeroCategory(models.Model):
@@ -281,17 +281,15 @@ class Hero(models.Model):
         return self.name
 
     def save(self, *args, **kwargs):
-        if self.name:
-            hero_img_title = 'Dota 2 Hero named {}'.format(self.name)
-            wagtail_images.set_title(self.horizontal_image, hero_img_title)
-            wagtail_images.set_title(self.vertical_image, hero_img_title)
-            for ability in self.abilities:
-                ability = ability.value
-                if ability['name']:
-                    ability_img_title = "{} ability of {}".format(
-                        ability['name'], self.name
-                    )
-                    wagtail_images.set_title(ability['image'], ability_img_title)
+        hero_img_title = 'Dota 2 Hero named {}'.format(self.name)
+        wagtail_images.set_title(self.horizontal_image, hero_img_title)
+        wagtail_images.set_title(self.vertical_image, hero_img_title)
+        for ability in self.abilities:
+            ability = ability.value
+            ability_img_title = "{} ability of {}".format(
+                ability['name'], self.name
+            )
+            wagtail_images.set_title(ability['image'], ability_img_title)
         super(Hero, self).save()
 
     class Meta:
