@@ -6,8 +6,8 @@ from .. import configurations
 class QuotationBlock(blocks.StructBlock):
     name = blocks.CharBlock(max_length=70)
     farsi_name = blocks.CharBlock(max_length=70, required=False)
-    text_test = blocks.TextBlock(required=True)
-    farsi_text_test = blocks.TextBlock(required=True)
+    text = blocks.TextBlock(required=True)
+    farsi_text = blocks.TextBlock(required=True)
 
 
 class IntroductionSection(blocks.StructBlock):
