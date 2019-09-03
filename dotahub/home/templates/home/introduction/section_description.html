@@ -20,13 +20,18 @@
                 </div>
                 <br>
                 <div class="normal-p">
-                    "
-                    {% if page.template_language == 'fa' %}
-                        {{ section.quotation.farsi_text }}
-                    {% elif page.template_language == 'en' %}
-                        {{ section.quotation.text }}
-                    {% endif %}
-                    "
+                    <p>
+                        <i>
+                            "
+                            {% if page.template_language == 'fa' %}
+                                {{ section.quotation.farsi_text }}
+                            {% elif page.template_language == 'en' %}
+                                {{ section.quotation.text }}
+                            {% endif %}
+                            "
+                        </i>
+                    </p>
+
                 </div>
                 <div class="small-p">
                     {% if page.template_language == 'fa' %}
