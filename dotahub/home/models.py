@@ -2,9 +2,9 @@ from django.utils.text import slugify
 from wagtail.core.models import Page
 from wagtailmetadata.models import MetadataPageMixin
 
-from .introduction.blocks import *
 from .heroes.blocks import *
 from .heroes.models import *
+from .introduction.blocks import *
 from .multilingual.models import *
 
 
@@ -20,42 +20,42 @@ class HeroesPage(MetadataPageMixin, HeroesPageMixin, MultilingualPageMixin, Page
     @property
     def radiant_strength_heroes(self):
         return HeroPage.objects.live().filter(
-            hero__type__name='Strength',
+            hero__hero_type__name='Strength',
             hero__ego='Radiant'
         )
 
     @property
     def dire_strength_heroes(self):
         return HeroPage.objects.live().filter(
-            hero__type__name='Strength',
+            hero__hero_type__name='Strength',
             hero__ego='Dire'
         )
 
     @property
     def radiant_agility_heroes(self):
         return HeroPage.objects.live().filter(
-            hero__type__name='Agility',
+            hero__hero_type__name='Agility',
             hero__ego='Radiant'
         )
 
     @property
     def dire_agility_heroes(self):
         return HeroPage.objects.live().filter(
-            hero__type__name='Agility',
+            hero__hero_type__name='Agility',
             hero__ego='Dire'
         )
 
     @property
     def radiant_intelligence_heroes(self):
         return HeroPage.objects.live().filter(
-            hero__type__name='Intelligence',
+            hero__hero_type__name='Intelligence',
             hero__ego='Radiant'
         )
 
     @property
     def dire_intelligence_heroes(self):
         return HeroPage.objects.live().filter(
-            hero__type__name='Intelligence',
+            hero__hero_type__name='Intelligence',
             hero__ego='Dire'
         )
 
@@ -107,6 +107,20 @@ class HeroPage(MetadataPageMixin, HeroesPageMixin, MultilingualPageMixin, Page):
 
     promote_panels = []
     settings_panels = []
+
+    @property
+    def farsi_url(self):
+        return super().get_farsi_url()
+
+    @property
+    def english_url(self):
+        return super().get_english_url()
+
+    api_fields = [
+        APIField('hero'),
+        APIField('farsi_url'),
+        APIField('english_url'),
+    ]
 
     def get_home_page(self):
         return self.get_parent().specific.get_home_page()

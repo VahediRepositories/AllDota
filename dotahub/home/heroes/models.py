@@ -1,16 +1,18 @@
 from django import forms
 from django.db import models
 from wagtail.admin.edit_handlers import MultiFieldPanel, FieldRowPanel, FieldPanel, StreamFieldPanel
+from wagtail.api import APIField
 from wagtail.core.blocks import StreamBlock
 from wagtail.core.fields import StreamField, RichTextField
+from wagtail.images.api.fields import ImageRenditionField
 from wagtail.images.edit_handlers import ImageChooserPanel
 from wagtail.snippets.blocks import SnippetChooserBlock
 from wagtail.snippets.edit_handlers import SnippetChooserPanel
 from wagtail.snippets.models import register_snippet
 
-from ..modules import wagtail_images
 from .blocks import *
 from .. import configurations
+from ..modules import wagtail_images
 
 
 class HeroPropertyImage(models.Model):
@@ -133,10 +135,12 @@ class Hero(models.Model):
         ], blank=False, null=True
     )
 
-    type = models.ForeignKey(
+    hero_type = models.ForeignKey(
         HeroType, on_delete=models.SET_NULL, null=True, blank=False
     )
+
     attack_types = models.ManyToManyField(HeroAttackType)
+
     roles = StreamField(
         [
             ('role', SnippetChooserBlock(HeroRole))
@@ -150,6 +154,7 @@ class Hero(models.Model):
             ], min_num=1, max_num=1, required=True
         ), blank=False, null=True
     )
+
     agility = StreamField(
         StreamBlock(
             [
@@ -157,6 +162,7 @@ class Hero(models.Model):
             ], min_num=1, max_num=1, required=True
         )
     )
+
     strength = StreamField(
         StreamBlock(
             [
@@ -164,6 +170,7 @@ class Hero(models.Model):
             ], min_num=1, max_num=1, required=True
         )
     )
+
     damage = StreamField(
         StreamBlock(
             [
@@ -171,6 +178,7 @@ class Hero(models.Model):
             ], min_num=1, max_num=1, required=True
         )
     )
+
     move_speed = StreamField(
         StreamBlock(
             [
@@ -178,6 +186,7 @@ class Hero(models.Model):
             ], min_num=1, max_num=1, required=True
         )
     )
+
     armor = StreamField(
         StreamBlock(
             [
@@ -201,6 +210,13 @@ class Hero(models.Model):
 
     farsi_translated = models.BooleanField(default=False)
     english_translated = models.BooleanField(default=False)
+
+    high_quality_image = models.ForeignKey(
+        'wagtailimages.Image',
+        help_text='high quality image',
+        null=True, blank=True, on_delete=models.SET_NULL, related_name='+'
+    )
+    instagram_ready = models.BooleanField(default=False)
 
     def get_intelligence(self):
         return self.intelligence[0].value
@@ -238,7 +254,7 @@ class Hero(models.Model):
         ),
         MultiFieldPanel(
             [
-                SnippetChooserPanel('type'),
+                SnippetChooserPanel('hero_type'),
                 FieldRowPanel(
                     [
                         FieldPanel("attack_types", widget=forms.CheckboxSelectMultiple),
@@ -274,7 +290,55 @@ class Hero(models.Model):
                 FieldPanel('farsi_translated'),
                 FieldPanel('english_translated')
             ], heading='Translations', classname='collapsible collapsed'
-        )
+        ),
+        MultiFieldPanel(
+            [
+                ImageChooserPanel('high_quality_image'),
+                FieldPanel('instagram_ready')
+            ], heading='Social Media', classname='collapsible collapsed'
+        ),
+    ]
+
+    @property
+    def group(self):
+        return self.hero_type.name
+
+    @property
+    def hero_attack_types(self):
+        return [
+            attack_type.name for attack_type in self.attack_types.all()
+        ]
+
+    @property
+    def hero_roles(self):
+        return [
+            role.value.name for role in self.roles
+        ]
+
+    api_fields = [
+        APIField('square_horizontal_image', serializer=ImageRenditionField(
+            'fill-2000x2000|jpegquality-100', source='horizontal_image')
+        ),
+        APIField('square_vertical_image', serializer=ImageRenditionField(
+            'fill-2000x2000|jpegquality-100', source='vertical_image')
+        ),
+        APIField('name'),
+        APIField('farsi_name'),
+        APIField('ego'),
+        APIField('group'),
+        APIField('hero_attack_types'),
+        APIField('hero_roles'),
+        APIField('intelligence'),
+        APIField('agility'),
+        APIField('strength'),
+        APIField('damage'),
+        APIField('move_speed'),
+        APIField('armor'),
+        APIField('biography'),
+        APIField('farsi_biography'),
+        APIField('abilities'),
+        APIField('farsi_translated'),
+        APIField('english_translated'),
     ]
 
     def __str__(self):
@@ -293,5 +357,5 @@ class Hero(models.Model):
         super(Hero, self).save()
 
     class Meta:
-        ordering = ('name', )
+        ordering = ('name',)
         verbose_name_plural = 'Heroes'
