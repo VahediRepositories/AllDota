@@ -317,7 +317,7 @@ class Hero(models.Model):
 
     api_fields = [
         APIField('image', serializer=ImageRenditionField(
-            'fill-2000x2000|jpegquality-100', source='high_quality_image')
+            'fill-2000x2000-c80|jpegquality-100', source='high_quality_image')
         ),
         APIField('name'),
         APIField('farsi_name'),
