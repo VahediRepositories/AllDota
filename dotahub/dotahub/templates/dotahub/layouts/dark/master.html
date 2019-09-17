@@ -6,7 +6,7 @@
 
 {% block extra_css %}
 
-    <link rel="icon" type="image/png" sizes="16x16" href="{% static 'dotahub/assets/images/favicon.png' %}">
+    {% include 'dotahub/brand/icon.html' %}
     <link href="{% static 'dotahub/dark/dist/css/style.css' %}" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
 

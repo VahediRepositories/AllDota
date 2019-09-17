@@ -7,7 +7,7 @@
 
 {% block extra_css %}
 
-    <link rel="icon" type="image/png" sizes="16x16" href="{% static 'dotahub/assets/images/favicon.png' %}">
+    {% include 'dotahub/brand/icon.html' %}
     <link href="{% static 'dotahub/rtl/dist/css/style.css' %}" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Harmattan&display=swap" rel="stylesheet">
 

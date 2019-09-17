@@ -1,0 +1,5 @@
+{% load wagtailimages_tags %}
+
+{% image page.logo_image_dark original as img_dark %}
+
+<link rel="icon" type="image/png" sizes="16x16" href="{{ img_dark.url }}">
