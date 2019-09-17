@@ -1,0 +1,7 @@
+{% load wagtailimages_tags %}
+
+{% image page.logo_image_dark original as img_dark %}
+
+<span><img src="{{ img_dark.url }}"
+           style="height: 40px; width: 40px;"
+           alt="AllDota"></span>

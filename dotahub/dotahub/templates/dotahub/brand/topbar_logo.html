@@ -1,0 +1,26 @@
+{% load wagtailimages_tags %}
+
+{% image page.logo_image_light original as img_light %}
+{% image page.logo_image_dark original as img_dark %}
+{% image page.logo_text_light original as text_light %}
+{% image page.logo_text_dark original as text_dark %}
+
+<a class="navbar-brand" href="/">
+    <b>
+        <img src="{{ img_dark.url }}"
+             style="width: 40px; height: 40px;"
+             alt="AllDota" class="dark-logo"/>
+        <img src="{{ img_light.url }}"
+             style="width: 40px; height: 40px;"
+             alt="AllDota" class="light-logo"/>
+    </b>
+    <span>
+
+                            <img src="{{ text_dark.url }}"
+                                 style="width: 92px; height: 26px;"
+                                 alt="AllDota" class="dark-logo"/>
+                            <img src="{{ text_light.url }}"
+                                 style="width: 92px; height: 26px;"
+                                 class="light-logo" alt="AllDota"/>
+                        </span>
+</a>

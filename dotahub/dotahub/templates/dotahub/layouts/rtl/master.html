@@ -66,24 +66,7 @@
                 <!-- Logo -->
                 <!-- ============================================================== -->
                 <div class="navbar-header">
-                    <a class="navbar-brand" href="{{ page.get_home_page.get_url }}">
-                        <!-- Logo icon --><b>
-                        <!--You can put here icon as well // <i class="wi wi-sunset"></i> //-->
-                        <!-- Dark Logo icon -->
-                        <img src="{% static 'dotahub/assets/images/logo-icon.png' %}"
-                             alt="AllDota" class="dark-logo"/>
-                        <!-- Light Logo icon -->
-                        <img src="{% static 'dotahub/assets/images/logo-light-icon.png' %}"
-                             alt="AllDota" class="light-logo"/>
-                    </b>
-                        <!--End Logo icon -->
-                        <!-- Logo text --><span>
-                         <!-- dark Logo text -->
-                         <img src="{% static 'dotahub/assets/images/logo-text.png' %}"
-                              alt="AllDota" class="dark-logo"/>
-                        <!-- Light Logo text -->
-                         <img src="{% static 'dotahub/assets/images/logo-light-text.png' %}"
-                              class="light-logo" alt="AllDota"/></span> </a>
+                    {% include 'dotahub/brand/topbar_logo.html' %}
                 </div>
                 <!-- ============================================================== -->
                 <!-- End Logo -->
@@ -429,7 +412,7 @@
         <!-- ============================================================== -->
         <aside class="left-sidebar">
             <div class="d-flex no-block nav-text-box align-items-center">
-                <span><img src="{% static 'dotahub/assets/images/logo-icon.png' %}" alt="elegant admin template"></span>
+                {% include 'dotahub/brand/left_sidebar_logo.html' %}
                 <a class="nav-lock waves-effect waves-dark ml-auto hidden-md-down" href="javascript:void(0)"><i
                         class="mdi mdi-toggle-switch"></i></a>
                 <a class="nav-toggler waves-effect waves-dark ml-auto hidden-sm-up" href="javascript:void(0)"><i

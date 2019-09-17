@@ -1,5 +1,7 @@
 {% extends 'home/fa/multilingual.html' %}
 
+{% load staticfiles %}
+
 {% block additional_css %}
 
 {% endblock %}
@@ -24,6 +26,15 @@
 {% endblock %}
 
 {% block additional_js %}
+
+{#    <script src="{% static 'dotahub/assets/js/html2convas.js' %}"></script>#}
+{##}
+{#    <script>#}
+{##}
+{#        html2canvas(document.querySelector("#capture")).then(canvas => {#}
+{#            document.getElementById('image-place').appendChild(canvas)#}
+{#        });#}
+{#    </script>#}
 
 {% endblock %}
 

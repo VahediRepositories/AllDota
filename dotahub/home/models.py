@@ -6,16 +6,17 @@ from .heroes.blocks import *
 from .heroes.models import *
 from .introduction.blocks import *
 from .multilingual.models import *
+from .logo.models import *
 
 
-class HomePage(Page):
+class HomePage(LogoContainingPageMixin, Page):
     subpage_types = [
         'home.HeroesPage',
         'home.Dota2IntroductionPage',
     ]
 
 
-class HeroesPage(MetadataPageMixin, HeroesPageMixin, MultilingualPageMixin, Page):
+class HeroesPage(LogoContainingPageMixin, MetadataPageMixin, HeroesPageMixin, MultilingualPageMixin, Page):
 
     @property
     def radiant_strength_heroes(self):
@@ -96,7 +97,7 @@ class HeroesPage(MetadataPageMixin, HeroesPageMixin, MultilingualPageMixin, Page
         return True
 
 
-class HeroPage(MetadataPageMixin, HeroesPageMixin, MultilingualPageMixin, Page):
+class HeroPage(LogoContainingPageMixin, MetadataPageMixin, HeroesPageMixin, MultilingualPageMixin, Page):
     hero = models.OneToOneField(
         Hero, on_delete=models.SET_NULL, blank=False, null=True
     )
@@ -164,7 +165,7 @@ class HeroPage(MetadataPageMixin, HeroesPageMixin, MultilingualPageMixin, Page):
         return self.hero.english_translated
 
 
-class Dota2IntroductionPage(MetadataPageMixin, MultilingualPageMixin, Page):
+class Dota2IntroductionPage(LogoContainingPageMixin, MetadataPageMixin, MultilingualPageMixin, Page):
     sections = StreamField(
         [
             ('section', IntroductionSection())
