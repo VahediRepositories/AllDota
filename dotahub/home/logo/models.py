@@ -39,22 +39,18 @@ class LogoContainingPageMixin:
 class Logo(models.Model):
     logo_image_light = models.ForeignKey(
         'wagtailimages.Image',
-        help_text='horizontal image',
         null=True, blank=False, on_delete=models.SET_NULL, related_name='+'
     )
     logo_image_dark = models.ForeignKey(
         'wagtailimages.Image',
-        help_text='horizontal image',
         null=True, blank=False, on_delete=models.SET_NULL, related_name='+'
     )
     text_image_light = models.ForeignKey(
         'wagtailimages.Image',
-        help_text='horizontal image',
         null=True, blank=False, on_delete=models.SET_NULL, related_name='+'
     )
     text_image_dark = models.ForeignKey(
         'wagtailimages.Image',
-        help_text='horizontal image',
         null=True, blank=False, on_delete=models.SET_NULL, related_name='+'
     )
     enabled = models.BooleanField(default=False)

@@ -18,32 +18,26 @@ from ..modules import wagtail_images
 class HeroPropertyImage(models.Model):
     intelligence = models.ForeignKey(
         'wagtailimages.Image',
-        help_text='horizontal image',
         null=True, blank=False, on_delete=models.SET_NULL, related_name='+'
     )
     agility = models.ForeignKey(
         'wagtailimages.Image',
-        help_text='horizontal image',
         null=True, blank=False, on_delete=models.SET_NULL, related_name='+'
     )
     strength = models.ForeignKey(
         'wagtailimages.Image',
-        help_text='horizontal image',
         null=True, blank=False, on_delete=models.SET_NULL, related_name='+'
     )
     damage = models.ForeignKey(
         'wagtailimages.Image',
-        help_text='horizontal image',
         null=True, blank=False, on_delete=models.SET_NULL, related_name='+'
     )
     move_speed = models.ForeignKey(
         'wagtailimages.Image',
-        help_text='horizontal image',
         null=True, blank=False, on_delete=models.SET_NULL, related_name='+'
     )
     armor = models.ForeignKey(
         'wagtailimages.Image',
-        help_text='horizontal image',
         null=True, blank=False, on_delete=models.SET_NULL, related_name='+'
     )
 
