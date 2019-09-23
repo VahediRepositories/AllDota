@@ -5,8 +5,8 @@ from wagtailmetadata.models import MetadataPageMixin
 from .heroes.blocks import *
 from .heroes.models import *
 from .introduction.blocks import *
-from .multilingual.models import *
 from .logo.models import *
+from .multilingual.models import *
 
 
 class HomePage(LogoContainingPageMixin, Page):

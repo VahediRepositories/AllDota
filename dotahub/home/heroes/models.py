@@ -122,6 +122,8 @@ class Hero(models.Model):
     name = models.CharField(max_length=50, blank=False, unique=True)
     farsi_name = models.CharField(max_length=50, blank=False, unique=True)
 
+    popularity = models.IntegerField(default=0)
+
     ego = models.CharField(
         max_length=10, choices=[
             ('Radiant', 'Radiant'),
@@ -242,6 +244,11 @@ class Hero(models.Model):
                 FieldRowPanel(
                     [
                         FieldPanel('name'), FieldPanel('farsi_name')
+                    ]
+                ),
+                FieldRowPanel(
+                    [
+                       FieldPanel('popularity')
                     ]
                 ),
             ], heading='Details', classname='collapsible collapsed'
