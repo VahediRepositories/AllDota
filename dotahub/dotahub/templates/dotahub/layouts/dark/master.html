@@ -1,12 +1,14 @@
 {% extends 'base.html' %}
 
 {% load staticfiles %}
+{% load wagtailimages_tags %}
 
 {% block direction %}ltr{% endblock %}
 
 {% block extra_css %}
 
-    <link rel="icon" type="image/png" sizes="16x16" href="{% static 'dotahub/assets/images/favicon.png' %}">
+    {% image page.favicon width-16 height-16 as favicon %}
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ favicon.url }}">
     <link href="{% static 'dotahub/dark/dist/css/style.css' %}" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
 

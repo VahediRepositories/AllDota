@@ -23,16 +23,12 @@ class LogoContainingPageMixin:
         return self.logo.text_image_dark
 
     @property
-    def first_logo(self):
-        return Logo.objects.first()
+    def favicon(self):
+        return self.logo.favicon
 
     @property
     def logo(self):
-        logo_object = Logo.objects.filter(enabled=True).first()
-        if logo_object:
-            return logo_object
-        else:
-            return self.first_logo
+        return Logo.objects.filter(enabled=True).first()
 
 
 @register_snippet
@@ -54,6 +50,10 @@ class Logo(models.Model):
         null=True, blank=False, on_delete=models.SET_NULL, related_name='+'
     )
     enabled = models.BooleanField(default=False)
+
+    @property
+    def favicon(self):
+        return self.logo_image_dark
 
     panels = [
         MultiFieldPanel(
