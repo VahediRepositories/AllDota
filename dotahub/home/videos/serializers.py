@@ -6,9 +6,8 @@ class VideoField(Field):
         pass
 
     def to_representation(self, video):
-        return {
+        dic = {
             'url': video.url,
             'title': video.title,
             'thumbnail': video.thumbnail.url
         }
-

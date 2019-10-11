@@ -1,13 +1,14 @@
+import cv2
+from django.core.files import File
 from django.db import models
-from wagtail.admin.edit_handlers import FieldPanel, StreamFieldPanel
+from wagtail.admin.edit_handlers import FieldPanel
 from wagtail.api import APIField
-from wagtail.core.blocks import CharBlock
-from wagtail.core.fields import StreamField
 from wagtail.snippets.models import register_snippet
 from wagtailvideos.edit_handlers import VideoChooserPanel
 from wagtailvideos.models import Video
 
 from . import serializers
+from dotahub.settings.base import MEDIA_ROOT
 
 
 @register_snippet
@@ -35,6 +36,21 @@ class SimpleVideo(models.Model):
         APIField('farsi_label'),
         APIField('english_label'),
     ]
+
+    def save(self, *args, **kwargs):
+        if not self.video.thumbnail:
+            video = cv2.VideoCapture(self.video.file.path)
+            ret, frame = video.read()
+            path = MEDIA_ROOT + '/original_images/video_{}_thumbnail.png'.format(
+                self.video.pk
+            )
+            cv2.imwrite(path, frame)
+            video.release()
+            cv2.destroyAllWindows()
+            file = File(open(path, 'rb'))
+            self.video.thumbnail.save(
+                path, file, True
+            )
 
     def __str__(self):
         return self.video.title

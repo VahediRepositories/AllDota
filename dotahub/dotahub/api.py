@@ -4,7 +4,7 @@ from wagtail.documents.api.v2.endpoints import DocumentsAPIEndpoint
 from wagtail.images.api.v2.endpoints import ImagesAPIEndpoint
 
 from home.heroes.api import HeroAPIEndpoint
-from home.instagram.videos.api import SimpleVideoAPIEndpoint
+from home.videos.api import SimpleVideoAPIEndpoint
 
 # Create the router. "wagtailapi" is the URL namespace
 api_router = WagtailAPIRouter('wagtailapi')

@@ -4,7 +4,7 @@ from wagtailmetadata.models import MetadataPageMixin
 
 from .heroes.blocks import *
 from .heroes.models import *
-from .instagram.videos.models import *
+from .videos.models import *
 from .introduction.blocks import *
 from .logo.models import *
 from .multilingual.models import *
