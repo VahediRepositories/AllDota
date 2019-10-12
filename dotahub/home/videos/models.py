@@ -1,14 +1,28 @@
 import cv2
 from django.core.files import File
 from django.db import models
-from wagtail.admin.edit_handlers import FieldPanel
+from dotahub.settings.base import MEDIA_ROOT
+from modelcluster.contrib.taggit import ClusterTaggableManager
+from taggit.models import TaggedItemBase
+from wagtail.admin.edit_handlers import FieldPanel, MultiFieldPanel
 from wagtail.api import APIField
 from wagtail.snippets.models import register_snippet
 from wagtailvideos.edit_handlers import VideoChooserPanel
 from wagtailvideos.models import Video
 
 from . import serializers
-from dotahub.settings.base import MEDIA_ROOT
+
+
+class SimpleVideoEnglishTag(TaggedItemBase):
+    content_object = models.ForeignKey(
+        'SimpleVideo', related_name='simple_video_english_tags', on_delete=models.CASCADE
+    )
+
+
+class SimpleVideoFarsiTag(TaggedItemBase):
+    content_object = models.ForeignKey(
+        'SimpleVideo', related_name='simple_video_farsi_tags', on_delete=models.CASCADE
+    )
 
 
 @register_snippet
@@ -23,11 +37,33 @@ class SimpleVideo(models.Model):
     farsi_label = models.TextField(default='')
     english_label = models.TextField(default='')
 
+    english_tags = ClusterTaggableManager(
+        through=SimpleVideoEnglishTag, blank=True, related_name='english_tags'
+    )
+    farsi_tags = ClusterTaggableManager(
+        through=SimpleVideoFarsiTag, blank=True, related_name='farsi_tags'
+    )
+
     panels = [
-        FieldPanel('caption'),
-        VideoChooserPanel('video'),
-        FieldPanel('farsi_label'),
-        FieldPanel('english_label'),
+        MultiFieldPanel(
+            [
+                VideoChooserPanel('video'),
+                FieldPanel('caption'),
+                FieldPanel('farsi_label'),
+                FieldPanel('english_label'),
+            ], heading='details', classname='collapsible collapsed'
+        ),
+
+        MultiFieldPanel(
+            [
+                FieldPanel('english_tags'),
+            ], heading='english_tags', classname='collapsible collapsed'
+        ),
+        MultiFieldPanel(
+            [
+                FieldPanel('farsi_tags'),
+            ], heading='farsi_tags', classname='collapsible collapsed'
+        )
     ]
 
     api_fields = [
