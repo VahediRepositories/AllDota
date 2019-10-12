@@ -13,6 +13,7 @@ from wagtailvideos.models import Video
 from . import serializers
 
 
+
 class SimpleVideoEnglishTag(TaggedItemBase):
     content_object = models.ForeignKey(
         'SimpleVideo', related_name='simple_video_english_tags', on_delete=models.CASCADE
