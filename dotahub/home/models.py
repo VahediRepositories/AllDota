@@ -356,7 +356,7 @@ class ShortVideoPage(
                     )
                 )
 
-    uuid4 = models.TextField(default='')
+    uuid4 = models.TextField(default='', blank=True)
 
     def set_uuid4(self):
         uuid4 = uuid.uuid4()
