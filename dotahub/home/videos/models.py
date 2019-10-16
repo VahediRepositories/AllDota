@@ -1,7 +1,7 @@
 import cv2
+from django.conf import settings
 from django.core.files import File
 from django.db import models
-from dotahub.settings.base import MEDIA_ROOT
 from modelcluster.contrib.taggit import ClusterTaggableManager
 from taggit.models import TaggedItemBase
 from wagtail.admin.edit_handlers import FieldPanel, MultiFieldPanel
@@ -13,10 +13,9 @@ from wagtailvideos.models import Video
 from . import serializers
 
 
-
 class SimpleVideoEnglishTag(TaggedItemBase):
     content_object = models.ForeignKey(
-        'SimpleVideo', related_name='simple_video_english_tags', on_delete=models.CASCADE
+        'SimpleVideo', related_name='tagged_items', on_delete=models.CASCADE
     )
 
 
@@ -39,11 +38,11 @@ class SimpleVideo(models.Model):
     english_label = models.TextField(default='')
 
     english_tags = ClusterTaggableManager(
-        through=SimpleVideoEnglishTag, blank=True, related_name='english_tags'
+        through=SimpleVideoEnglishTag, blank=True
     )
-    farsi_tags = ClusterTaggableManager(
-        through=SimpleVideoFarsiTag, blank=True, related_name='farsi_tags'
-    )
+    # farsi_tags = ClusterTaggableManager(
+    #     through=SimpleVideoFarsiTag, blank=True, related_name='farsi_tags'
+    # )
 
     panels = [
         MultiFieldPanel(
@@ -60,11 +59,11 @@ class SimpleVideo(models.Model):
                 FieldPanel('english_tags'),
             ], heading='english_tags', classname='collapsible collapsed'
         ),
-        MultiFieldPanel(
-            [
-                FieldPanel('farsi_tags'),
-            ], heading='farsi_tags', classname='collapsible collapsed'
-        )
+        # MultiFieldPanel(
+        #     [
+        #         FieldPanel('farsi_tags'),
+        #     ], heading='farsi_tags', classname='collapsible collapsed'
+        # )
     ]
 
     api_fields = [
@@ -78,7 +77,7 @@ class SimpleVideo(models.Model):
         if not self.video.thumbnail:
             video = cv2.VideoCapture(self.video.file.path)
             ret, frame = video.read()
-            path = MEDIA_ROOT + '/original_images/video_{}_thumbnail.png'.format(
+            path = settings.MEDIA_ROOT + '/original_images/video_{}_thumbnail.png'.format(
                 self.video.pk
             )
             cv2.imwrite(path, frame)
@@ -88,6 +87,7 @@ class SimpleVideo(models.Model):
             self.video.thumbnail.save(
                 path, file, True
             )
+        super(SimpleVideo, self).save()
 
     def __str__(self):
         return self.video.title

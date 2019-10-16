@@ -1,5 +1,8 @@
 from django.utils.text import slugify
+from modelcluster.fields import ParentalKey
+from wagtail.admin.edit_handlers import RichTextFieldPanel
 from wagtail.core.models import Page
+from wagtailmedia.edit_handlers import MediaChooserPanel
 from wagtailmetadata.models import MetadataPageMixin
 
 from .heroes.blocks import *
@@ -10,14 +13,25 @@ from .logo.models import *
 from .multilingual.models import *
 
 
-class HomePage(LogoContainingPageMixin, Page):
+class AllDotaPageMixin:
+
+    @staticmethod
+    def get_home_page():
+        return HomePage.objects.first()
+
+
+class HomePage(AllDotaPageMixin, LogoContainingPageMixin, Page):
     subpage_types = [
         'home.HeroesPage',
         'home.Dota2IntroductionPage',
+        'home.ShortVideoPage',
     ]
 
 
-class HeroesPage(LogoContainingPageMixin, MetadataPageMixin, HeroesPageMixin, MultilingualPageMixin, Page):
+class HeroesPage(
+    AllDotaPageMixin, LogoContainingPageMixin,
+    MetadataPageMixin, HeroesPageMixin, MultilingualPageMixin, Page
+):
 
     @property
     def radiant_strength_heroes(self):
@@ -67,9 +81,6 @@ class HeroesPage(LogoContainingPageMixin, MetadataPageMixin, HeroesPageMixin, Mu
     parent_page_types = ['home.HomePage']
     subpage_types = ['home.HeroPage']
 
-    def get_home_page(self):
-        return self.get_parent()
-
     def clean(self):
         super().clean()
         self.title = 'Heroes'
@@ -98,7 +109,10 @@ class HeroesPage(LogoContainingPageMixin, MetadataPageMixin, HeroesPageMixin, Mu
         return True
 
 
-class HeroPage(LogoContainingPageMixin, MetadataPageMixin, HeroesPageMixin, MultilingualPageMixin, Page):
+class HeroPage(
+    AllDotaPageMixin, LogoContainingPageMixin,
+    MetadataPageMixin, HeroesPageMixin, MultilingualPageMixin, Page
+):
     hero = models.OneToOneField(
         Hero, on_delete=models.SET_NULL, blank=False, null=True
     )
@@ -123,9 +137,6 @@ class HeroPage(LogoContainingPageMixin, MetadataPageMixin, HeroesPageMixin, Mult
         APIField('farsi_url'),
         APIField('english_url'),
     ]
-
-    def get_home_page(self):
-        return self.get_parent().specific.get_home_page()
 
     parent_page_types = ['home.HeroesPage']
     subpage_types = []
@@ -166,7 +177,10 @@ class HeroPage(LogoContainingPageMixin, MetadataPageMixin, HeroesPageMixin, Mult
         return self.hero.english_translated
 
 
-class Dota2IntroductionPage(LogoContainingPageMixin, MetadataPageMixin, MultilingualPageMixin, Page):
+class Dota2IntroductionPage(
+    AllDotaPageMixin, LogoContainingPageMixin,
+    MetadataPageMixin, MultilingualPageMixin, Page
+):
     sections = StreamField(
         [
             ('section', IntroductionSection())
@@ -211,9 +225,131 @@ class Dota2IntroductionPage(LogoContainingPageMixin, MetadataPageMixin, Multilin
         self.title = 'Dota2 Introduction'
         self.slug = slugify(self.title)
 
-    def get_home_page(self):
-        return self.get_parent()
+    @property
+    def template(self):
+        return super().template
+
+
+class ShortVideoPageEnglishTag(TaggedItemBase):
+    content_object = ParentalKey(
+        'ShortVideoPage', related_name='short_video_page_english_tags'
+    )
+
+
+class ShortVideoPageFarsiTag(TaggedItemBase):
+    content_object = ParentalKey(
+        'ShortVideoPage', related_name='short_video_page_farsi_tags'
+    )
+
+
+class ShortVideoPage(
+    AllDotaPageMixin, LogoContainingPageMixin,
+    MetadataPageMixin, MultilingualPageMixin, Page
+):
+    video = models.ForeignKey(
+        'wagtailmedia.Media',
+        null=True,
+        blank=False,
+        on_delete=models.SET_NULL,
+        related_name='+'
+    )
+
+    english_title = RichTextField(
+        features=[], blank=False, null=True
+    )
+
+    farsi_title = RichTextField(
+        features=[], blank=False, null=True,
+        help_text='It has to start with a farsi word'
+    )
+
+    english_caption = RichTextField(
+        features=[], blank=False, null=True,
+    )
+
+    farsi_caption = RichTextField(
+        features=[], blank=False, null=True,
+        help_text='It has to start with a farsi word'
+    )
+
+    english_tags = ClusterTaggableManager(
+        through=ShortVideoPageEnglishTag, blank=True, related_name='english_tags'
+    )
+    farsi_tags = ClusterTaggableManager(
+        through=ShortVideoPageFarsiTag, blank=True, related_name='farsi_tags'
+    )
+
+    content_panels = [
+        MultiFieldPanel(
+            [
+                MediaChooserPanel('video'),
+            ], heading='video', classname='collapsible collapsed'
+        ),
+        MultiFieldPanel(
+            [
+                FieldPanel('farsi_title'),
+                RichTextFieldPanel('farsi_caption'),
+                FieldPanel('english_tags'),
+            ], heading='farsi', classname='collapsible collapsed'
+        ),
+        MultiFieldPanel(
+            [
+                FieldPanel('english_title'),
+                RichTextFieldPanel('english_caption'),
+                FieldPanel('farsi_tags'),
+            ], heading='english', classname='collapsible collapsed'
+        ),
+    ]
+    promote_panels = []
+    settings_panels = []
+
+    @property
+    def farsi_url(self):
+        return super().get_farsi_url()
+
+    @property
+    def english_url(self):
+        return super().get_english_url()
 
     @property
     def template(self):
         return super().template
+
+    def serve(self, request, *args, **kwargs):
+        language = translation.get_language()
+        if language == 'fa':
+            self.search_description = text_processing.html_to_str(
+                self.english_caption
+            )
+            self.seo_title = text_processing.html_to_str(
+                self.english_title
+            )
+        else:
+            self.search_description = text_processing.html_to_str(
+                self.farsi_caption
+            )
+            self.seo_title = text_processing.html_to_str(
+                self.farsi_title
+            )
+        return super().serve(request, *args, **kwargs)
+
+    def clean(self):
+        super().clean()
+        english_title = text_processing.html_to_str(
+            self.english_title
+        )
+        pages = ShortVideoPage.objects.filter(title=english_title)
+        if pages:
+            index = len(pages)
+            self.title = '{}_{}'.format(
+                english_title, index
+            )
+        else:
+            self.title = english_title
+        self.slug = slugify(self.title)
+
+    parent_page_types = ['home.HomePage']
+    subpage_types = []
+
+    def __str__(self):
+        return self.english_title
