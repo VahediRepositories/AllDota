@@ -1,3 +1,5 @@
+import uuid
+
 from django.utils.text import slugify
 from modelcluster.fields import ParentalKey
 from wagtail.admin.edit_handlers import RichTextFieldPanel
@@ -335,18 +337,32 @@ class ShortVideoPage(
 
     def clean(self):
         super().clean()
-        english_title = text_processing.html_to_str(
+        self.title = text_processing.html_to_str(
             self.english_title
         )
-        pages = ShortVideoPage.objects.filter(title=english_title)
+        pages = ShortVideoPage.objects.filter(title=self.title)
         if pages:
-            index = len(pages)
-            self.title = '{}_{}'.format(
-                english_title, index
-            )
-        else:
-            self.title = english_title
-        self.slug = slugify(self.title)
+            if not self.id:
+                self.set_uuid4()
+                self.slug = slugify(
+                    '{}_{}'.format(
+                        self.title, self.uuid4
+                    )
+                )
+            else:
+                self.slug = slugify(
+                    '{}_{}'.format(
+                        self.title, self.id
+                    )
+                )
+
+    uuid4 = models.TextField(default='')
+
+    def set_uuid4(self):
+        uuid4 = uuid.uuid4()
+        while ShortVideoPage.objects.filter(uuid4=uuid4).exists():
+            uuid4 = uuid.uuid4()
+        self.uuid4 = str(uuid4)
 
     parent_page_types = ['home.HomePage']
     subpage_types = []
