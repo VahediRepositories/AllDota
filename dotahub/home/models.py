@@ -1,7 +1,9 @@
 import uuid
 
 from django.utils.text import slugify
+from modelcluster.contrib.taggit import ClusterTaggableManager
 from modelcluster.fields import ParentalKey
+from taggit.models import TaggedItemBase
 from wagtail.admin.edit_handlers import RichTextFieldPanel
 from wagtail.core.models import Page
 from wagtailmedia.edit_handlers import MediaChooserPanel
@@ -9,7 +11,6 @@ from wagtailmetadata.models import MetadataPageMixin
 
 from .heroes.blocks import *
 from .heroes.models import *
-from .videos.models import *
 from .introduction.blocks import *
 from .logo.models import *
 from .multilingual.models import *

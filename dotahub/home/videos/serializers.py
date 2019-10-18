@@ -9,5 +9,5 @@ class VideoField(Field):
         dic = {
             'url': video.url,
             'title': video.title,
-            'thumbnail': video.thumbnail.url
+            'thumbnail': video.thumbnail
         }
