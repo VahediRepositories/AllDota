@@ -27,7 +27,6 @@ class HomePage(AllDotaPageMixin, LogoContainingPageMixin, Page):
     subpage_types = [
         'home.HeroesPage',
         'home.Dota2IntroductionPage',
-        'home.ShortVideoPage',
         'home.ShortVideosPage',
     ]
 
@@ -367,7 +366,7 @@ class ShortVideoPage(
             uuid4 = uuid.uuid4()
         self.uuid4 = str(uuid4)
 
-    parent_page_types = ['home.HomePage']
+    parent_page_types = ['home.ShortVideosPage']
     subpage_types = []
 
     def __str__(self):
