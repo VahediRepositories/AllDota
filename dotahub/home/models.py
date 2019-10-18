@@ -28,6 +28,7 @@ class HomePage(AllDotaPageMixin, LogoContainingPageMixin, Page):
         'home.HeroesPage',
         'home.Dota2IntroductionPage',
         'home.ShortVideoPage',
+        'home.ShortVideosPage',
     ]
 
 
@@ -78,6 +79,7 @@ class HeroesPage(
             hero__ego='Dire'
         )
 
+    content_panels = []
     promote_panels = []
     settings_panels = []
 
@@ -370,3 +372,43 @@ class ShortVideoPage(
 
     def __str__(self):
         return self.english_title
+
+
+class ShortVideosPage(
+    AllDotaPageMixin, LogoContainingPageMixin,
+    MetadataPageMixin, HeroesPageMixin, MultilingualPageMixin, Page
+):
+
+    content_panels = []
+    promote_panels = []
+    settings_panels = []
+
+    parent_page_types = ['home.HomePage']
+    subpage_types = ['home.ShortVideoPage']
+
+    def clean(self):
+        super().clean()
+        self.title = 'Short Videos'
+        self.slug = slugify(self.title)
+
+    def serve(self, request, *args, **kwargs):
+        language = translation.get_language()
+        if language == 'fa':
+            self.search_description = 'ويديو هاى كوتاه ديدنى دوتا 2 را اينجا ببينيد'
+            self.seo_title = 'ويديو هاى كوتاه دوتا 2'
+        else:
+            self.search_description = 'Amazing Dota 2 short videos'
+            self.seo_title = 'Dota 2 short videos'
+        return super().serve(request, *args, **kwargs)
+
+    @property
+    def template(self):
+        return super().template
+
+    @property
+    def farsi_translated(self):
+        return True
+
+    @property
+    def english_translated(self):
+        return True
