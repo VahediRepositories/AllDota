@@ -1,0 +1,25 @@
+{% extends 'home/fa/multilingual.html' %}
+
+{% load staticfiles %}
+
+{% block additional_css %}
+
+{% endblock %}
+
+{% block breadcrumb %}
+
+    <li class="breadcrumb-item active normal-p">{{ page.id }}</li>
+    <li class="breadcrumb-item normal-p"><a href="{{ page.get_parent.get_url }}">Videos</a></li>
+    <li class="breadcrumb-item normal-p"><a href="{{ page.get_home_page.get_url }}">Home</a></li>
+
+{% endblock %}
+
+{% block main_content %}
+
+    {% include 'home/videos/video_page/page.html' %}
+
+{% endblock %}
+
+{% block additional_js %}
+
+{% endblock %}

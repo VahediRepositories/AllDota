@@ -319,6 +319,14 @@ class ShortVideoPage(
     def template(self):
         return super().template
 
+    @property
+    def farsi_translated(self):
+        return True
+
+    @property
+    def english_translated(self):
+        return True
+
     def serve(self, request, *args, **kwargs):
         language = translation.get_language()
         if language == 'fa':
@@ -377,7 +385,6 @@ class ShortVideosPage(
     AllDotaPageMixin, LogoContainingPageMixin,
     MetadataPageMixin, HeroesPageMixin, MultilingualPageMixin, Page
 ):
-
     content_panels = []
     promote_panels = []
     settings_panels = []
