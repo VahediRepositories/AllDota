@@ -164,9 +164,10 @@ class HeroPage(
 
     def clean(self):
         super().clean()
-        self.title = self.hero.name
-        self.slug = slugify(self.title)
-        self.search_image = self.hero.horizontal_image
+        if self.hero:
+            self.title = self.hero.name
+            self.slug = slugify(self.title)
+            self.search_image = self.hero.horizontal_image
 
     @property
     def template(self):
@@ -347,24 +348,25 @@ class ShortVideoPage(
 
     def clean(self):
         super().clean()
-        self.title = text_processing.html_to_str(
-            self.english_title
-        )
-        pages = ShortVideoPage.objects.filter(title=self.title)
-        if pages:
-            if not self.id:
-                self.set_uuid4()
-                self.slug = slugify(
-                    '{}_{}'.format(
-                        self.title, self.uuid4
+        if self.english_title:
+            self.title = text_processing.html_to_str(
+                self.english_title
+            )
+            pages = ShortVideoPage.objects.filter(title=self.title)
+            if pages:
+                if not self.id:
+                    self.set_uuid4()
+                    self.slug = slugify(
+                        '{}_{}'.format(
+                            self.title, self.uuid4
+                        )
                     )
-                )
-            else:
-                self.slug = slugify(
-                    '{}_{}'.format(
-                        self.title, self.id
+                else:
+                    self.slug = slugify(
+                        '{}_{}'.format(
+                            self.title, self.id
+                        )
                     )
-                )
 
     uuid4 = models.TextField(default='', blank=True)
 
