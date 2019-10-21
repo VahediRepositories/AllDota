@@ -6,6 +6,7 @@ from modelcluster.fields import ParentalKey
 from taggit.models import TaggedItemBase
 from wagtail.admin.edit_handlers import RichTextFieldPanel
 from wagtail.core.models import Page
+from wagtail.images.models import Image
 from wagtailmedia.edit_handlers import MediaChooserPanel
 from wagtailmetadata.models import MetadataPageMixin
 
@@ -259,6 +260,11 @@ class ShortVideoPage(
         related_name='+'
     )
 
+    thumbnail = models.ForeignKey(
+        'wagtailimages.Image',
+        null=True, blank=True, on_delete=models.SET_NULL, related_name='+'
+    )
+
     english_title = RichTextField(
         features=[], blank=False, null=True
     )
@@ -288,6 +294,7 @@ class ShortVideoPage(
         MultiFieldPanel(
             [
                 MediaChooserPanel('video'),
+                ImageChooserPanel('thumbnail'),
             ], heading='video', classname='collapsible collapsed'
         ),
         MultiFieldPanel(
