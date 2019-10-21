@@ -51,18 +51,18 @@
                     <div class="col-md-12 text-center">
                         {% if page.template_language == 'fa' %}
                             {% for tag in page.farsi_tags.all %}
-                                <a class="btn waves-effect waves-light btn-secondary">
+                                <a class="btn waves-effect waves-light btn-secondary" style="margin: 2%;">
                                     {{ tag }}
                                 </a>
                             {% endfor %}
                             {% for tag in page.english_tags.all %}
-                                <a class="btn waves-effect waves-light btn-secondary">
+                                <a class="btn waves-effect waves-light btn-secondary" style="margin: 2%;">
                                     {{ tag }}
                                 </a>
                             {% endfor %}
                         {% elif page.template_language == 'en' %}
                             {% for tag in page.english_tags.all %}
-                                <a class="btn waves-effect waves-light btn-secondary">
+                                <a class="btn waves-effect waves-light btn-secondary" style="margin: 2%;">
                                     {{ tag }}
                                 </a>
                             {% endfor %}
