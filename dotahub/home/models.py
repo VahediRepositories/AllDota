@@ -294,14 +294,14 @@ class ShortVideoPage(
             [
                 FieldPanel('farsi_title'),
                 RichTextFieldPanel('farsi_caption'),
-                FieldPanel('english_tags'),
+                FieldPanel('farsi_tags'),
             ], heading='farsi', classname='collapsible collapsed'
         ),
         MultiFieldPanel(
             [
                 FieldPanel('english_title'),
                 RichTextFieldPanel('english_caption'),
-                FieldPanel('farsi_tags'),
+                FieldPanel('english_tags'),
             ], heading='english', classname='collapsible collapsed'
         ),
     ]
