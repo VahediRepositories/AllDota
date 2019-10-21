@@ -273,28 +273,31 @@ class ShortVideoPage(
         if self.video_thumbnail:
             return self.video_thumbnail
         else:
-            generated_file = False
-            if self.video.thumbnail:
-                file = open(self.video.thumbnail.path, 'rb')
-                file = File(file)
-            else:
-                clip = cv2.VideoCapture(self.video.file.path)
-                ret, frame = clip.read()
-                generated_file = 'thumbnail.jpeg'
-                cv2.imwrite(generated_file, frame)
-                file = open(generated_file, 'rb')
-                file = File(file)
-            thumbnail = Image(
-                title=text_processing.html_to_str(
-                    self.english_title
-                ), file=file
-            )
-            thumbnail.save()
-            self.video_thumbnail = thumbnail
-            self.save()
-            if generated_file:
-                os.remove(generated_file)
-            return thumbnail
+            return self.update_thumbnail()
+
+    def update_thumbnail(self):
+        generated_file = False
+        if self.video.thumbnail:
+            file = open(self.video.thumbnail.path, 'rb')
+            file = File(file)
+        else:
+            clip = cv2.VideoCapture(self.video.file.path)
+            ret, frame = clip.read()
+            generated_file = 'thumbnail.jpeg'
+            cv2.imwrite(generated_file, frame)
+            file = open(generated_file, 'rb')
+            file = File(file)
+        thumbnail = Image(
+            title=text_processing.html_to_str(
+                self.english_title
+            ), file=file
+        )
+        thumbnail.save()
+        self.video_thumbnail = thumbnail
+        self.save()
+        if generated_file:
+            os.remove(generated_file)
+        return thumbnail
 
     english_title = RichTextField(
         features=[], blank=False, null=True
