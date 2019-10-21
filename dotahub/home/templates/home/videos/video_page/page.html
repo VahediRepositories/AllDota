@@ -29,11 +29,14 @@
                 </div>
                 <div class="row">
                     <div class="col-md-12 text-center">
-                        {% if page.template_language == 'fa' %}
-                            {{ page.farsi_caption|richtext }}
-                        {% elif page.template_language == 'en' %}
-                            {{ page.english_caption|richtext }}
-                        {% endif %}
+                        <p class="normal-p">
+                            {% if page.template_language == 'fa' %}
+                                {{ page.farsi_caption|richtext }}
+                            {% elif page.template_language == 'en' %}
+                                {{ page.english_caption|richtext }}
+                            {% endif %}
+                        </p>
+
                     </div>
                 </div>
             </div>
