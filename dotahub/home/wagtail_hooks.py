@@ -1,14 +1,13 @@
 import os
+import cv2
 
 from django.core.files import File
-from moviepy.video.io.VideoFileClip import VideoFileClip
 from wagtail.core import hooks
 from .models import *
 
 
 @hooks.register('after_create_page')
 def after_create_short_video_page(request, page):
-    print('@@@@@@@@@@@@@@@@@@@@@@@@  creating')
     page = page.specific
     if isinstance(page, ShortVideoPage):
         set_short_video_page_thumbnail(page)
@@ -16,7 +15,6 @@ def after_create_short_video_page(request, page):
 
 @hooks.register('after_edit_page')
 def after_edit_short_video_page(request, page):
-    print('@@@@@@@@@@@@@@@@@@@@@@@  editing')
     page = page.specific
     if isinstance(page, ShortVideoPage):
         set_short_video_page_thumbnail(page)
@@ -28,9 +26,10 @@ def set_short_video_page_thumbnail(page):
         file = open(page.video.thumbnail.path, 'rb')
         file = File(file)
     else:
-        clip = VideoFileClip(page.video.file.path)
+        clip = cv2.VideoCapture(page.video.file.path)
+        ret, frame = clip.read()
         generated_file = 'thumbnail.jpeg'
-        clip.save_frame(generated_file, t=0)
+        cv2.imwrite(generated_file, frame)
         file = open(generated_file, 'rb')
         file = File(file)
     thumbnail = Image(
