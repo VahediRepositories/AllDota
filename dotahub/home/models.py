@@ -294,7 +294,6 @@ class ShortVideoPage(
         MultiFieldPanel(
             [
                 MediaChooserPanel('video'),
-                ImageChooserPanel('thumbnail'),
             ], heading='video', classname='collapsible collapsed'
         ),
         MultiFieldPanel(
