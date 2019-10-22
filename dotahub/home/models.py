@@ -34,6 +34,7 @@ class HomePage(AllDotaPageMixin, LogoContainingPageMixin, Page):
         'home.HeroesPage',
         'home.Dota2IntroductionPage',
         'home.ShortVideosPage',
+        'home.ShortPostsPage',
     ]
 
 
@@ -447,8 +448,198 @@ class ShortVideosPage(
             self.search_description = 'ويديو هاى كوتاه ديدنى دوتا 2 را اينجا ببينيد'
             self.seo_title = 'ويديو هاى كوتاه دوتا 2'
         else:
-            self.search_description = 'Amazing Dota 2 short videos'
-            self.seo_title = 'Dota 2 short videos'
+            self.search_description = 'Amazing Dota 2 short short_videos'
+            self.seo_title = 'Dota 2 short short_videos'
+        return super().serve(request, *args, **kwargs)
+
+    @staticmethod
+    def get_row_posts(posts):
+        return list(
+            reversed(list_processing.list_to_sublists_of_size_n(posts, 2))
+        )
+
+    def get_context(self, request, *args, **kwargs):
+        context = super().get_context(request, *args, **kwargs)
+        children = self.get_children().live().public()
+        paginator = Paginator(children, 5)
+        page = request.GET.get('page')
+        try:
+            posts = paginator.page(page)
+        except PageNotAnInteger:
+            posts = paginator.page(1)
+        except EmptyPage:
+            posts = paginator.page(paginator.num_pages)
+        context['row_posts'] = self.get_row_posts(posts)
+        context['posts'] = posts
+        return context
+
+    @property
+    def template(self):
+        return super().template
+
+    @property
+    def farsi_translated(self):
+        return True
+
+    @property
+    def english_translated(self):
+        return True
+
+
+class ShortPostPageEnglishTag(TaggedItemBase):
+    content_object = ParentalKey(
+        'ShortPostPage', related_name='short_post_page_english_tags'
+    )
+
+
+class ShortPostPageFarsiTag(TaggedItemBase):
+    content_object = ParentalKey(
+        'ShortPostPage', related_name='short_post_page_farsi_tags'
+    )
+
+
+class ShortPostPage(
+    AllDotaPageMixin, LogoContainingPageMixin,
+    MetadataPageMixin, MultilingualPageMixin, Page
+):
+    image = models.ForeignKey(
+        'wagtailimages.Image',
+        null=True, blank=False, on_delete=models.SET_NULL, related_name='+'
+    )
+
+    english_caption = RichTextField(
+        features=[], blank=False, null=True,
+    )
+
+    farsi_caption = RichTextField(
+        features=[], blank=False, null=True,
+        help_text='It has to start with a farsi word'
+    )
+
+    english_tags = ClusterTaggableManager(
+        through=ShortPostPageEnglishTag, blank=True, related_name='short_post_english_tags'
+    )
+    farsi_tags = ClusterTaggableManager(
+        through=ShortPostPageFarsiTag, blank=True, related_name='short_post_farsi_tags'
+    )
+
+    content_panels = [
+        MultiFieldPanel(
+            [
+                ImageChooserPanel('image')
+            ], heading='image', classname='collapsible collapsed'
+        ),
+        MultiFieldPanel(
+            [
+                RichTextFieldPanel('farsi_caption'),
+                FieldPanel('farsi_tags'),
+            ], heading='farsi', classname='collapsible collapsed'
+        ),
+        MultiFieldPanel(
+            [
+                RichTextFieldPanel('english_caption'),
+                FieldPanel('english_tags'),
+            ], heading='english', classname='collapsible collapsed'
+        ),
+    ]
+    promote_panels = []
+    settings_panels = []
+
+    @property
+    def farsi_url(self):
+        return super().get_farsi_url()
+
+    @property
+    def english_url(self):
+        return super().get_english_url()
+
+    @property
+    def template(self):
+        return super().template
+
+    @property
+    def farsi_translated(self):
+        return True
+
+    @property
+    def english_translated(self):
+        return True
+
+    def serve(self, request, *args, **kwargs):
+        language = translation.get_language()
+        if language == 'en':
+            self.search_description = text_processing.html_to_str(
+                self.english_caption
+            )
+            self.seo_title = self.title
+        else:
+            self.search_description = text_processing.html_to_str(
+                self.farsi_caption
+            )
+            self.seo_title = self.title
+        return super().serve(request, *args, **kwargs)
+
+    def clean(self):
+        super().clean()
+        if self.image and self.image.title:
+            self.title = self.image.title
+            pages = ShortPostPage.objects.filter(title=self.title)
+            if pages:
+                if not self.id:
+                    self.set_uuid4()
+                    self.slug = slugify(
+                        '{}_{}'.format(
+                            self.title, self.uuid4
+                        )
+                    )
+                else:
+                    self.slug = slugify(
+                        '{}_{}'.format(
+                            self.title, self.id
+                        )
+                    )
+
+    uuid4 = models.TextField(default='', blank=True)
+
+    def set_uuid4(self):
+        uuid4 = uuid.uuid4()
+        while ShortVideoPage.objects.filter(uuid4=uuid4).exists():
+            uuid4 = uuid.uuid4()
+        self.uuid4 = str(uuid4)
+
+    parent_page_types = [
+        'home.ShortPostsPage',
+    ]
+    subpage_types = []
+
+    def __str__(self):
+        return self.english_title
+
+
+class ShortPostsPage(
+    AllDotaPageMixin, LogoContainingPageMixin,
+    MetadataPageMixin, HeroesPageMixin, MultilingualPageMixin, Page
+):
+    content_panels = []
+    promote_panels = []
+    settings_panels = []
+
+    parent_page_types = ['home.HomePage']
+    subpage_types = ['home.ShortPostPage']
+
+    def clean(self):
+        super().clean()
+        self.title = 'Short Posts'
+        self.slug = slugify(self.title)
+
+    def serve(self, request, *args, **kwargs):
+        language = translation.get_language()
+        if language == 'fa':
+            self.search_description = 'مطالب كوتاه درباره ى دوتا 2 (Dota2)'
+            self.seo_title = self.search_description
+        else:
+            self.search_description = 'Dota 2 short posts'
+            self.seo_title = self.search_description
         return super().serve(request, *args, **kwargs)
 
     @staticmethod

@@ -1,0 +1,99 @@
+{% load wagtailimages_tags %}
+{% load wagtailcore_tags %}
+{% load text_processing %}
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card">
+                <div class="row">
+                    <div class="col-lg-2">
+
+                    </div>
+                    <div class="col-lg-8">
+                        {% for post_row in row_posts %}
+                            <div class="row">
+                                <div class="col-12 m-t-30">
+                                    <div class="card-deck">
+                                        {% for post_page in post_row %}
+                                            <div class="card bg-inverse">
+                                                <a href="{{ post_page.get_url }}" style="padding: 3%;">
+                                                    {% image post_page.specific.image fill-1000x600-c100 as post_img %}
+                                                    <img class="card-img-top img-responsive" src="{{ post_img.url }}"
+                                                         alt="{{ post_img.alt }}">
+                                                </a>
+
+                                                <div class="card-body text-center">
+                                                    <h4 class="card-title normal-h4"
+                                                        style="height: 150px; overflow-y: hidden;">
+                                                        {% if page.template_language == 'fa' %}
+                                                            {{ post_page.specific.farsi_caption|html_to_str|truncatechars:300 }}
+                                                        {% elif page.template_language == 'en' %}
+                                                            {{ post_page.specific.english_caption|html_to_str|truncatechars:300 }}
+                                                        {% endif %}
+                                                    </h4>
+                                                    <div class="row">
+                                                        <div class="col-lg-12">
+                                                            <a href="{{ article_page.get_url }}"
+                                                               class="btn btn-lg btn-outline btn-secondary normal-h4">
+                                                                {% if page.template_language == 'en' %}
+                                                                    Explore
+                                                                {% elif page.template_language == 'fa' %}
+                                                                     مشاهده
+                                                                {% endif %}
+                                                            </a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <div class="col-lg-2">
+
+                    </div>
+                </div>
+                {% if posts.paginator.num_pages > 1 %}
+                    <div class="row">
+                        <div class="col-lg-2">
+
+                        </div>
+                        <div class="col-lg-8">
+                            <div class="btn-toolbar">
+                                <div class="btn-group">
+                                    {% if posts.has_previous %}
+                                        <a href="?page={{ posts.previous_page_number }}" class="btn btn-secondary">
+                                            <span>&laquo;</span>
+                                        </a>
+                                    {% endif %}
+                                    {% for page_num in posts.paginator.page_range %}
+                                        {% if page_num == posts.number %}
+                                            <a class="btn btn-dark disabled">
+                                                {{ page_num }}
+                                            </a>
+                                        {% else %}
+                                            <a href="?page={{ page_num }}" class="btn btn-secondary">
+                                                {{ page_num }}
+                                            </a>
+                                        {% endif %}
+                                    {% endfor %}
+                                    {% if posts.has_next %}
+                                        <a href="?page={{ posts.next_page_number }}" class="btn btn-secondary">
+                                            <span>&raquo;</span>
+                                        </a>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-2">
+
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>

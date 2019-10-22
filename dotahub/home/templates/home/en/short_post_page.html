@@ -6,20 +6,17 @@
 
 {% endblock %}
 
-{% block page_title %}
-
-{% endblock %}
-
 {% block breadcrumb %}
 
     <li class="breadcrumb-item normal-p"><a href="{{ page.get_home_page.get_url }}">Home</a></li>
-    <li class="breadcrumb-item active normal-p">Short Videos</li>
+    <li class="breadcrumb-item normal-p"><a href="{{ page.get_parent.get_url }}">Posts</a></li>
+    <li class="breadcrumb-item active normal-p">{{ page.id }}</li>
 
 {% endblock %}
 
 {% block main_content %}
 
-    {% include 'home/posts/short_videos/videos_page/page.html' %}
+    {% include 'home/posts/short_posts/post_page/page.html' %}
 
 {% endblock %}
 
