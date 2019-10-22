@@ -3,6 +3,7 @@ import uuid
 
 import cv2
 from django.core.files import File
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.utils.text import slugify
 from modelcluster.contrib.taggit import ClusterTaggableManager
 from modelcluster.fields import ParentalKey
@@ -13,6 +14,7 @@ from wagtail.images.models import Image
 from wagtailmedia.edit_handlers import MediaChooserPanel
 from wagtailmetadata.models import MetadataPageMixin
 
+from .modules import list_processing
 from .heroes.blocks import *
 from .heroes.models import *
 from .introduction.blocks import *
@@ -448,6 +450,27 @@ class ShortVideosPage(
             self.search_description = 'Amazing Dota 2 short videos'
             self.seo_title = 'Dota 2 short videos'
         return super().serve(request, *args, **kwargs)
+
+    @staticmethod
+    def get_row_posts(posts):
+        return list(
+            reversed(list_processing.list_to_sublists_of_size_n(posts, 2))
+        )
+
+    def get_context(self, request, *args, **kwargs):
+        context = super().get_context(request, *args, **kwargs)
+        children = self.get_children().live().public()
+        paginator = Paginator(children, 5)
+        page = request.GET.get('page')
+        try:
+            posts = paginator.page(page)
+        except PageNotAnInteger:
+            posts = paginator.page(1)
+        except EmptyPage:
+            posts = paginator.page(paginator.num_pages)
+        context['row_posts'] = self.get_row_posts(posts)
+        context['posts'] = posts
+        return context
 
     @property
     def template(self):
