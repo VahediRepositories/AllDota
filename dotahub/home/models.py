@@ -14,9 +14,11 @@ from wagtail.images.models import Image
 from wagtailmedia.edit_handlers import MediaChooserPanel
 from wagtailmetadata.models import MetadataPageMixin
 
+from .blogs.models import BlogPost
 from .modules import list_processing
 from .heroes.blocks import *
 from .heroes.models import *
+from .blogs.blocks import *
 from .introduction.blocks import *
 from .logo.models import *
 from .multilingual.models import *
@@ -35,6 +37,7 @@ class HomePage(AllDotaPageMixin, LogoContainingPageMixin, Page):
         'home.Dota2IntroductionPage',
         'home.ShortVideosPage',
         'home.ShortPostsPage',
+        'home.BlogsPage',
     ]
 
 
@@ -618,7 +621,7 @@ class ShortPostPage(
 
 class ShortPostsPage(
     AllDotaPageMixin, LogoContainingPageMixin,
-    MetadataPageMixin, HeroesPageMixin, MultilingualPageMixin, Page
+    MetadataPageMixin, MultilingualPageMixin, Page
 ):
     content_panels = []
     promote_panels = []
@@ -674,3 +677,414 @@ class ShortPostsPage(
     @property
     def english_translated(self):
         return True
+
+
+class BlogsPage(
+    AllDotaPageMixin, LogoContainingPageMixin,
+    MetadataPageMixin, MultilingualPageMixin, Page
+):
+    content_panels = []
+    promote_panels = []
+    settings_panels = []
+
+    parent_page_types = ['home.HomePage']
+    subpage_types = [
+        'home.AllDotaBlogPost1',
+    ]
+
+    def clean(self):
+        super().clean()
+        self.title = 'Blogs'
+        self.slug = slugify(self.title)
+
+    def serve(self, request, *args, **kwargs):
+        language = translation.get_language()
+        if language == 'fa':
+            self.seo_title = 'وبلاگ آلدوتا'
+            self.search_description = self.seo_title + ' شامل عكس ها، ويديو ها و پست هاى دوتا 2 (DOTA 2)'
+        else:
+            self.seo_title = 'AllDota Blogs'
+            self.search_description = self.seo_title + ' including images, videos, posts about Dota 2'
+        return super().serve(request, *args, **kwargs)
+
+    # @staticmethod
+    # def get_row_posts(posts):
+    #     return list(
+    #         reversed(list_processing.list_to_sublists_of_size_n(posts, 2))
+    #     )
+    #
+    # def get_context(self, request, *args, **kwargs):
+    #     context = super().get_context(request, *args, **kwargs)
+    #     children = self.get_children().live().public()
+    #     paginator = Paginator(children, 5)
+    #     page = request.GET.get('page')
+    #     try:
+    #         posts = paginator.page(page)
+    #     except PageNotAnInteger:
+    #         posts = paginator.page(1)
+    #     except EmptyPage:
+    #         posts = paginator.page(paginator.num_pages)
+    #     context['row_posts'] = self.get_row_posts(posts)
+    #     context['posts'] = posts
+    #     return context
+
+    @property
+    def template(self):
+        return super().template
+
+    @property
+    def farsi_translated(self):
+        return True
+
+    @property
+    def english_translated(self):
+        return True
+
+
+class AllDotaBlogPost1FarsiTag(TaggedItemBase):
+    content_object = ParentalKey(
+        'AllDotaBlogPost1', related_name='blog_post1_farsi_tags', on_delete=models.CASCADE
+    )
+
+
+class AllDotaBlogPost1EnglishTag(TaggedItemBase):
+    content_object = ParentalKey(
+        'AllDotaBlogPost1', related_name='blog_post1_english_tags', on_delete=models.CASCADE
+    )
+
+
+class AllDotaBlogPost1(
+    AllDotaPageMixin, LogoContainingPageMixin, MultilingualPageMixin, MetadataPageMixin, Page
+):
+    image = models.ForeignKey(
+        'wagtailimages.Image',
+        help_text='high quality image',
+        null=True, blank=False, on_delete=models.SET_NULL, related_name='+'
+    )
+    farsi_content = models.ForeignKey(
+        BlogPost, blank=True, on_delete=models.SET_NULL, null=True, related_name='farsi_content'
+    )
+    english_content = models.ForeignKey(
+        BlogPost, blank=True, on_delete=models.SET_NULL, null=True, related_name='english_content'
+    )
+    farsi_tags = ClusterTaggableManager(
+        through=AllDotaBlogPost1FarsiTag, blank=True, related_name='post1_farsi_tags'
+    )
+    english_tags = ClusterTaggableManager(
+        through=AllDotaBlogPost1EnglishTag, blank=True, related_name='post1_english_tags'
+    )
+    farsi_translated = models.BooleanField(default=False, blank=False)
+    english_translated = models.BooleanField(default=False, blank=False)
+
+    uuid4 = models.TextField(default='')
+
+    content_panels = [
+        MultiFieldPanel(
+            [
+                ImageChooserPanel('image')
+            ], heading="Image", classname='collapsible collapsed'
+        ),
+        MultiFieldPanel(
+            [
+                SnippetChooserPanel('english_content'),
+                FieldPanel('english_tags'),
+            ], heading="English", classname='collapsible collapsed'
+        ),
+        MultiFieldPanel(
+            [
+                SnippetChooserPanel('farsi_content'),
+                FieldPanel('farsi_tags'),
+            ], heading="Farsi", classname='collapsible collapsed'
+        ),
+        MultiFieldPanel(
+            [
+                FieldPanel('farsi_translated'),
+                FieldPanel('english_translated'),
+            ], heading='Translation', classname='collapsible collapsed'
+        ),
+    ]
+
+    promote_panels = []
+    settings_panels = []
+
+    @property
+    def template(self):
+        return super().template
+
+    def clean(self):
+        super().clean()
+        if not self.id:
+            self.refresh_slug()
+        if self.english_content:
+            self.title = text_processing.html_to_str(
+                self.english_content.post_title
+            )
+        elif self.farsi_content:
+            self.title = text_processing.html_to_str(
+                self.farsi_content.post_title
+            )
+        else:
+            self.title = self.slug
+        # self.search_image = self.image
+
+    def refresh_slug(self):
+        self.set_uuid4()
+        self.slug = '{}-'.format(
+            type(self).__name__
+        ) + self.uuid4
+
+    def set_english_seo(self):
+        self.seo_title = 'Blogs - {}'.format(
+            text_processing.html_to_str(
+                self.english_content.post_title
+            )
+        )
+        self.search_description = text_processing.html_to_str(
+            self.english_content.post_summary
+        )
+
+    def set_farsi_seo(self):
+        self.seo_title = 'وبلاگ - {}'.format(
+            text_processing.html_to_str(
+                self.farsi_content.post_title
+            )
+        )
+        self.search_description = text_processing.html_to_str(
+            self.farsi_content.post_summary
+        )
+
+    def serve(self, request, *args, **kwargs):
+        language = translation.get_language()
+        if language == 'fa':
+            if self.farsi_content:
+                self.set_farsi_seo()
+            elif self.english_content:
+                self.set_english_seo()
+        elif language == 'en':
+            if self.english_content:
+                self.set_english_seo()
+            elif self.farsi_content:
+                self.set_farsi_seo()
+        return super().serve(request, *args, **kwargs)
+
+    def set_uuid4(self):
+        uuid4 = uuid.uuid4()
+        while AllDotaBlogPost1.objects.filter(uuid4=uuid4).exists():
+            uuid4 = uuid.uuid4()
+        self.uuid4 = str(uuid4)
+
+    class Meta:
+        ordering = [
+            '-first_published_at'
+        ]
+
+# class BlogPost(AllDotaPageMixin, LogoContainingPageMixin, MetadataPageMixin, Page):
+#     post_title = RichTextField(
+#         features=[], blank=False, null=True,
+#     )
+#     post_summary = RichTextField(
+#         features=configurations.RICHTEXT_FEATURES, blank=False, null=True,
+#     )
+#     post_introduction = RichTextField(
+#         features=configurations.RICHTEXT_FEATURES, blank=True, null=True,
+#     )
+#     post_conclusion = RichTextField(
+#         features=configurations.RICHTEXT_FEATURES, blank=True, null=True,
+#     )
+#     sections = StreamField(
+#         [
+#             ('section', SectionBlock()),
+#         ], blank=False
+#     )
+#
+#     @property
+#     def sections_with_title(self):
+#         sections = []
+#         for section in self.sections:
+#             if section.value['title']:
+#                 sections.append(section)
+#         return sections
+#
+#     def clean(self):
+#         super().clean()
+#         if not self.id:
+#             self.set_uuid4()
+#             self.slug = 'post-' + self.uuid4
+#         if self.post_title:
+#             self.title = text_processing.html_to_str(self.article_title)
+#         # self.search_image = self.image
+#
+#     def set_uuid4(self):
+#         uuid4 = uuid.uuid4()
+#         while self.manager.filter(uuid4=uuid4).exists():
+#             uuid4 = uuid.uuid4()
+#         self.uuid4 = str(uuid4)
+#
+#     uuid4 = models.TextField(default='')
+#
+#     parent_page_types = ['home.BlogsPage']
+#     subpage_types = []
+#
+#     class Meta:
+#         abstract = True
+#         ordering = [
+#             '-first_published_at'
+#         ]
+#
+#
+# class BlogPostType1(BlogPost):
+#     image = models.ForeignKey(
+#         'wagtailimages.Image',
+#         null=True, blank=False, on_delete=models.SET_NULL, related_name='+'
+#     )
+#
+#     class Meta:
+#         abstract = True
+#
+#
+# class FarsiBlogPost1FarsiTag(TaggedItemBase):
+#     content_object = ParentalKey(
+#         'FarsiBlogPost1', related_name='farsi_blog_post_farsi_tags', on_delete=models.CASCADE
+#     )
+#
+#
+# class FarsiBlogPost1EnglishTag(TaggedItemBase):
+#     content_object = ParentalKey(
+#         'FarsiBlogPost1', related_name='farsi_blog_post_english_tags', on_delete=models.CASCADE
+#     )
+#
+#
+# class FarsiBlogPost1(MultilingualPageMixin, BlogPostType1):
+#     farsi_tags = ClusterTaggableManager(
+#         through=FarsiBlogPost1FarsiTag, blank=False, related_name='farsi_post_farsi_tags'
+#     )
+#     english_tags = ClusterTaggableManager(
+#         through=FarsiBlogPost1EnglishTag, blank=True, related_name='farsi_post_english_tags'
+#     )
+#
+#     content_panels = [
+#         MultiFieldPanel(
+#             [
+#                 RichTextFieldPanel('post_title'),
+#                 ImageChooserPanel('image'),
+#             ], heading='Details', classname="collapsible collapsed"
+#         ),
+#         MultiFieldPanel(
+#             [
+#                 RichTextFieldPanel('post_summary'),
+#                 RichTextFieldPanel('post_introduction'),
+#                 StreamFieldPanel('sections'),
+#                 RichTextFieldPanel('post_conclusion'),
+#             ], heading='Content', classname="collapsible collapsed"
+#         ),
+#         MultiFieldPanel(
+#             [
+#                 FieldPanel('farsi_tags'),
+#             ], heading='Farsi Tags', classname='collapsible collapsed'
+#         ),
+#         MultiFieldPanel(
+#             [
+#                 FieldPanel('english_tags'),
+#             ], heading='English Tags', classname='collapsible collapsed'
+#         ),
+#     ]
+#
+#     promote_panels = []
+#     settings_panels = []
+#
+#     def serve(self, request, *args, **kwargs):
+#         self.search_description = self.title
+#         if self.sections_with_title:
+#             self.search_description += ' شامل ' + text_processing.str_list_to_comma_separated(
+#                 [
+#                     text_processing.html_to_str(section.value['title'].source)
+#                     for section in self.sections_with_title
+#                 ]
+#             )
+#         self.seo_title = 'وبلاگ - {}'.format(
+#             self.title
+#         )
+#         return super().serve(request, *args, **kwargs)
+#
+#     @property
+#     def manager(self):
+#         return FarsiBlogPost1.objects
+#
+#     @property
+#     def farsi_translated(self):
+#         return True
+#
+#     @property
+#     def english_translated(self):
+#         return False
+#
+#     @property
+#     def template(self):
+#         return super().template
+#
+#
+# class EnglishBlogPost1Tag(TaggedItemBase):
+#     content_object = ParentalKey(
+#         'EnglishBlogPost1', related_name='english_blog_post_tags', on_delete=models.CASCADE
+#     )
+#
+#
+# class EnglishBlogPost1(BlogPostType1):
+#     tags = ClusterTaggableManager(
+#         through=EnglishBlogPost1Tag, blank=False, related_name='english_post_tags'
+#     )
+#
+#     content_panels = [
+#         MultiFieldPanel(
+#             [
+#                 RichTextFieldPanel('post_title'),
+#                 ImageChooserPanel('image'),
+#             ], heading='Details', classname="collapsible collapsed"
+#         ),
+#         MultiFieldPanel(
+#             [
+#                 RichTextFieldPanel('post_summary'),
+#                 RichTextFieldPanel('post_introduction'),
+#                 StreamFieldPanel('sections'),
+#                 RichTextFieldPanel('post_conclusion'),
+#             ], heading='Content', classname="collapsible collapsed"
+#         ),
+#         MultiFieldPanel(
+#             [
+#                 FieldPanel('tags'),
+#             ], heading='Tags', classname='collapsible collapsed'
+#         ),
+#     ]
+#
+#     promote_panels = []
+#     settings_panels = []
+#
+#     def serve(self, request, *args, **kwargs):
+#         self.search_description = self.title
+#         if self.sections_with_title:
+#             self.search_description += ' including ' + text_processing.str_list_to_comma_separated(
+#                 [
+#                     text_processing.html_to_str(section.value['title'].source)
+#                     for section in self.sections_with_title
+#                 ]
+#             )
+#         self.seo_title = 'Blogs - {}'.format(
+#             self.title
+#         )
+#         return super().serve(request, *args, **kwargs)
+#
+#     @property
+#     def manager(self):
+#         return EnglishBlogPost1.objects
+#
+#     @property
+#     def farsi_translated(self):
+#         return False
+#
+#     @property
+#     def english_translated(self):
+#         return True
+#
+#     @property
+#     def template(self):
+#         return super().template

@@ -1,0 +1,19 @@
+<div class="row">
+    <div class="col-md-1"></div>
+    <div class="col-md-9">
+        <div class="card" style="height: 100%;">
+            <div class="card-body">
+                {% if page.template_language == 'fa' %}
+                    {% for section in page.farsi_content.sections %}
+                        {% include 'home/posts/alldota_posts/post_page/section.html' %}
+                    {% endfor %}
+                {% elif page.template_language == 'en' %}
+                    {% for section in page.english_content.sections %}
+                        {% include 'home/posts/alldota_posts/post_page/section.html' %}
+                    {% endfor %}
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <div class="col-md-2"></div>
+</div>

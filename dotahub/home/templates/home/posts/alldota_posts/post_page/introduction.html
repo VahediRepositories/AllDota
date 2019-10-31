@@ -1,0 +1,13 @@
+{% if page.template_language == 'fa' %}
+    {% with paragraph=page.farsi_content.post_introduction %}
+
+        {% include 'home/posts/alldota_posts/post_page/text_row.html' %}
+
+    {% endwith %}
+{% elif page.template_language == 'en' %}
+    {% with paragraph=page.english_content.post_introduction %}
+
+        {% include 'home/posts/alldota_posts/post_page/text_row.html' %}
+
+    {% endwith %}
+{% endif %}

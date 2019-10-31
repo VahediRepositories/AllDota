@@ -1,0 +1,190 @@
+{% load wagtailimages_tags %}
+{% load wagtailcore_tags %}
+{% load staticfiles %}
+{% load text_processing %}
+
+
+<div class="row">
+    <div class="col-md-1"></div>
+    <div class="col-md-9 text-center">
+        <h2>
+            <h1 class="normal-h2">
+                {% if page.template_language == 'fa' %}
+                    {{ page.farsi_content.post_title|html_to_str }}
+                {% elif page.template_language == 'en' %}
+                    {{ page.english_content.post_title|html_to_str }}
+                {% endif %}
+            </h1>
+        </h2>
+    </div>
+    <div class="col-md-2"></div>
+</div>
+<div class="row">
+    <div class="col-md-1"></div>
+    <div class="col-md-9">
+        {% image page.image fill-4000x2000 as image %}
+        <img src="{{ image.url }}"
+             style="width: 100%; height: 100%;"
+             alt="{{ image.alt }}">
+    </div>
+    <div class="col-md-2"></div>
+</div>
+
+<div class="row row-flex">
+    <div class="col-md-1"></div>
+    <div class="col-md-9">
+        {% include 'home/posts/alldota_posts/post_page/summary.html' %}
+    </div>
+    <div class="col-md-2"></div>
+</div>
+
+{% include 'home/posts/alldota_posts/post_page/introduction.html' %}
+
+{% include 'home/posts/alldota_posts/post_page/sections.html' %}
+
+{% include 'home/posts/alldota_posts/post_page/conclusion.html' %}
+
+{% include 'home/posts/alldota_posts/post_page/tags.html' %}
+
+<div class="row">
+    <div class="col-md-1"></div>
+    <div class="col-md-9 bg-danger">
+        <div class="card m-b-0">
+            <!-- .chat-row -->
+            <div class="chat-main-box" style="height: 100%;">
+                <div class="chat-main-header">
+                    <div class="p-3 b-b">
+                        <h4 class="box-title normal-h4">
+                            نظرات كاربران
+                        </h4>
+                    </div>
+                </div>
+                <div class="chat-rbox" style="height: 600px;">
+                    <ul class="chat-list p-3">
+                        <!--chat Row -->
+                        <li>
+                            <div class="chat-img">
+                                <img src="{% static 'dotahub/assets/images/users/1.jpg' %}"
+                                     alt="user"/>
+                            </div>
+                            <div class="chat-content">
+                                <h5>James Anderson</h5>
+                                <div class="box bg-light-info">Lorem Ipsum is simply dummy text of the printing
+                                    & type setting industry.
+                                </div>
+                                <div class="chat-time">10:56 am</div>
+                            </div>
+                        </li>
+                        <!--chat Row -->
+                        <li>
+                            <div class="chat-img"><img src="{% static 'dotahub/assets/images/users/2.jpg' %}"
+                                                       alt="user"/></div>
+                            <div class="chat-content">
+                                <h5>Bianca Doe</h5>
+                                <div class="box bg-light-info">It’s Great opportunity to work.</div>
+                                <div class="chat-time">10:57 am</div>
+                            </div>
+                        </li>
+                        <!--chat Row -->
+                        <li>
+                            <div class="chat-img"><img src="{% static 'dotahub/assets/images/users/3.jpg' %}"
+                                                       alt="user"/></div>
+                            <div class="chat-content">
+                                <h5>Angelina Rhodes</h5>
+                                <div class="box bg-light-info">Well we have good budget for the project</div>
+                                <div class="chat-time">11:00 am</div>
+                            </div>
+                        </li>
+                        <!--chat Row -->
+                        <li>
+                            <div class="chat-img"><img src="{% static 'dotahub/assets/images/users/3.jpg' %}"
+                                                       alt="user"/></div>
+                            <div class="chat-content">
+                                <h5>Angelina Rhodes</h5>
+                                <div class="box bg-light-info">Well we have good budget for the project</div>
+                                <div class="chat-time">11:00 am</div>
+                            </div>
+                        </li>
+                        <!--chat Row -->
+                        <li>
+                            <div class="chat-img"><img src="{% static 'dotahub/assets/images/users/3.jpg' %}"
+                                                       alt="user"/></div>
+                            <div class="chat-content">
+                                <h5>Angelina Rhodes</h5>
+                                <div class="box bg-light-info">Well we have good budget for the project</div>
+                                <div class="chat-time">11:00 am</div>
+                            </div>
+                        </li>
+                        <!--chat Row -->
+                        <li>
+                            <div class="chat-img"><img src="{% static 'dotahub/assets/images/users/3.jpg' %}"
+                                                       alt="user"/></div>
+                            <div class="chat-content">
+                                <h5>Angelina Rhodes</h5>
+                                <div class="box bg-light-info">Well we have good budget for the project</div>
+                                <div class="chat-time">11:00 am</div>
+                            </div>
+                        </li>
+                        <!--chat Row -->
+                        <li>
+                            <div class="chat-img"><img src="{% static 'dotahub/assets/images/users/3.jpg' %}"
+                                                       alt="user"/></div>
+                            <div class="chat-content">
+                                <h5>Angelina Rhodes</h5>
+                                <div class="box bg-light-info">Well we have good budget for the project</div>
+                                <div class="chat-time">11:00 am</div>
+                            </div>
+                        </li>
+                        <!--chat Row -->
+                        <li>
+                            <div class="chat-img"><img src="{% static 'dotahub/assets/images/users/3.jpg' %}"
+                                                       alt="user"/></div>
+                            <div class="chat-content">
+                                <h5>Angelina Rhodes</h5>
+                                <div class="box bg-light-info">Well we have good budget for the project</div>
+                                <div class="chat-time">11:00 am</div>
+                            </div>
+                        </li>
+                        <!--chat Row -->
+                        <li>
+                            <div class="chat-img"><img src="{% static 'dotahub/assets/images/users/3.jpg' %}"
+                                                       alt="user"/></div>
+                            <div class="chat-content">
+                                <h5>Angelina Rhodes</h5>
+                                <div class="box bg-light-info">Well we have good budget for the project</div>
+                                <div class="chat-time">11:00 am</div>
+                            </div>
+                        </li>
+                        <!--chat Row -->
+                        <li>
+                            <div class="chat-img"><img src="{% static 'dotahub/assets/images/users/3.jpg' %}"
+                                                       alt="user"/></div>
+                            <div class="chat-content">
+                                <h5>Angelina Rhodes</h5>
+                                <div class="box bg-light-info">Well we have good budget for the project</div>
+                                <div class="chat-time">11:00 am</div>
+                            </div>
+                        </li>
+                        <!--chat Row -->
+                    </ul>
+                </div>
+                <div class="card-body border-top">
+                    <div class="row">
+                        <div class="col-8">
+                                    <textarea placeholder="Type your message here"
+                                              class="form-control border-0"></textarea>
+                        </div>
+                        <div class="col-4 text-right">
+                            <button type="button" class="btn btn-success btn-circle btn-lg"><i
+                                    class="fas fa-paper-plane"></i></button>
+                        </div>
+                    </div>
+                </div>
+                {#                    </div>#}
+                <!-- .chat-right-panel -->
+            </div>
+            <!-- /.chat-row -->
+        </div>
+    </div>
+    <div class="col-md-2"></div>
+</div>

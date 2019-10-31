@@ -1,4 +1,5 @@
 from django.db import models
+from django.http import Http404
 from django.utils import translation
 from wagtail.admin.edit_handlers import FieldPanel
 from wagtail.images.edit_handlers import ImageChooserPanel
@@ -29,6 +30,7 @@ class MultilingualPageMixin:
                 return 'en'
             elif self.farsi_translated:
                 return 'fa'
+        raise Http404()
 
     @property
     def template_language_dir(self):
