@@ -1,0 +1,66 @@
+{% load wagtailimages_tags %}
+{% load text_processing %}
+
+<div class="col-12 m-t-30">
+    <div class="card-deck">
+        {% for post in post_row %}
+            <div class="card bg-inverse">
+                <a href="{{ post.get_url }}"
+                   style="padding: 2% 2% 0px;">
+                    {% image post.specific.image fill-1000x550-c100 as article_img %}
+                    <img class="card-img-top img-responsive"
+                         src="{{ article_img.url }}"
+                         alt="{{ article_img.alt }}">
+                </a>
+
+                <div class="card-body text-center">
+                    <h2 class="card-title normal-h4"
+                        style="height: 60px; overflow-y: hidden;">
+                        {% if page.template_language == 'fa' %}
+                            {{ post.specific.farsi_content.post_title|html_to_str|truncatechars:70 }}
+                        {% elif page.template_language == 'en' %}
+                            {{ post.specific.english_content.post_title|html_to_str|truncatechars:70 }}
+                        {% endif %}
+                    </h2>
+
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="not-visible-big" style="height: 300px; padding: 3%; overflow-y: hidden;">
+                                <p class="normal-p">
+                                    {% if page.template_language == 'fa' %}
+                                        {{ post.specific.farsi_content.post_summary|html_to_str|truncatechars:250 }}
+                                    {% elif page.template_language == 'en' %}
+                                        {{ post.specific.farsi_content.post_summary|html_to_str|truncatechars:250 }}
+                                    {% endif %}
+                                </p>
+                            </div>
+                            <div class="not-visible-small" style="height: 170px; padding: 3%; overflow-y: hidden;">
+                                <p class="normal-p">
+                                    {% if page.template_language == 'fa' %}
+                                        {{ post.specific.farsi_content.post_summary|html_to_str|truncatechars:250 }}
+                                    {% elif page.template_language == 'en' %}
+                                        {{ post.specific.farsi_content.post_summary|html_to_str|truncatechars:250 }}
+                                    {% endif %}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <a href="{{ post.get_url }}"
+                               class="btn btn-lg btn-outline-success normal-h4">
+                                {% if page.template_language == 'fa' %}
+                                    مشاهده
+                                {% elif page.template_language == 'en' %}
+                                    Read
+                                {% endif %}
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        {% endfor %}
+    </div>
+</div>

@@ -707,26 +707,26 @@ class BlogsPage(
             self.search_description = self.seo_title + ' including images, videos, posts about Dota 2'
         return super().serve(request, *args, **kwargs)
 
-    # @staticmethod
-    # def get_row_posts(posts):
-    #     return list(
-    #         reversed(list_processing.list_to_sublists_of_size_n(posts, 2))
-    #     )
-    #
-    # def get_context(self, request, *args, **kwargs):
-    #     context = super().get_context(request, *args, **kwargs)
-    #     children = self.get_children().live().public()
-    #     paginator = Paginator(children, 5)
-    #     page = request.GET.get('page')
-    #     try:
-    #         posts = paginator.page(page)
-    #     except PageNotAnInteger:
-    #         posts = paginator.page(1)
-    #     except EmptyPage:
-    #         posts = paginator.page(paginator.num_pages)
-    #     context['row_posts'] = self.get_row_posts(posts)
-    #     context['posts'] = posts
-    #     return context
+    @staticmethod
+    def get_row_posts(posts):
+        return list(
+            reversed(list_processing.list_to_sublists_of_size_n(posts, 2))
+        )
+
+    def get_context(self, request, *args, **kwargs):
+        context = super().get_context(request, *args, **kwargs)
+        children = self.get_children().live().public()
+        paginator = Paginator(children, 5)
+        page = request.GET.get('page')
+        try:
+            posts = paginator.page(page)
+        except PageNotAnInteger:
+            posts = paginator.page(1)
+        except EmptyPage:
+            posts = paginator.page(paginator.num_pages)
+        context['row_posts'] = self.get_row_posts(posts)
+        context['posts'] = posts
+        return context
 
     @property
     def template(self):
