@@ -55,7 +55,11 @@
                 <div class="chat-main-header">
                     <div class="p-3 b-b">
                         <h4 class="box-title normal-h4">
-                            نظرات كاربران
+                            {% if page.template_language == 'fa' %}
+                                نظرات كاربران
+                            {% elif page.template_language == 'en' %}
+                                Comments
+                            {% endif %}
                         </h4>
                     </div>
                 </div>
