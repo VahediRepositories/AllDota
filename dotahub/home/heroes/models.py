@@ -131,6 +131,7 @@ class Ability(models.Model):
         return self.name
 
     class Meta:
+        ordering = ('name',)
         verbose_name_plural = 'Abilities'
 
 
@@ -232,12 +233,6 @@ class Hero(models.Model):
         ], blank=False, null=True
     )
 
-    abilities = StreamField(
-        [
-            ('ability', HeroAbility())
-        ], null=True, blank=True
-    )
-
     farsi_translated = models.BooleanField(default=False)
     english_translated = models.BooleanField(default=False)
 
@@ -313,7 +308,6 @@ class Hero(models.Model):
         ),
         MultiFieldPanel(
             [
-                StreamFieldPanel('abilities'),
                 StreamFieldPanel('hero_abilities'),
             ], heading='Abilities', classname='collapsible collapsed'
         ),
@@ -365,7 +359,7 @@ class Hero(models.Model):
         APIField('armor'),
         APIField('biography'),
         APIField('farsi_biography'),
-        APIField('abilities'),
+        APIField('hero_abilities'),
         APIField('farsi_translated'),
         APIField('english_translated'),
     ]
@@ -377,12 +371,12 @@ class Hero(models.Model):
         hero_img_title = 'Dota 2 Hero named {}'.format(self.name)
         wagtail_images.set_title(self.horizontal_image, hero_img_title)
         wagtail_images.set_title(self.vertical_image, hero_img_title)
-        for ability in self.abilities:
+        for ability in self.hero_abilities:
             ability = ability.value
             ability_img_title = "{} ability of {}".format(
-                ability['name'], self.name
+                ability.name, self.name
             )
-            wagtail_images.set_title(ability['image'], ability_img_title)
+            wagtail_images.set_title(ability.image, ability_img_title)
         super(Hero, self).save()
 
     class Meta:
