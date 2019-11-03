@@ -108,7 +108,7 @@ class HeroRole(HeroCategory):
 
 @register_snippet
 class Ability(models.Model):
-    name = models.TextField(blank=False, unique=True)
+    name = models.TextField(blank=False)
     image = models.ForeignKey(
         'wagtailimages.Image',
         null=True, blank=False, on_delete=models.SET_NULL, related_name='+'
