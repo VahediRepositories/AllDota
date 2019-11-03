@@ -256,12 +256,8 @@ class Hero(models.Model):
         MultiFieldPanel(
             [
                 SnippetChooserPanel('hero_type'),
-                FieldRowPanel(
-                    [
-                        FieldPanel("attack_types", widget=forms.CheckboxSelectMultiple),
-                        FieldPanel('ego'),
-                    ]
-                ),
+                FieldPanel("attack_types", widget=forms.CheckboxSelectMultiple),
+                FieldPanel('ego'),
                 StreamFieldPanel('roles'),
             ], heading='categories', classname='collapsible collapsed'
         ),
