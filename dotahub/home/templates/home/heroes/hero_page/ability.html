@@ -4,7 +4,7 @@
 <div class="row">
     <div class="col-md-3">
         <div class="text-center" style="padding: 10%;">
-            {% image ability.value.image width-90 height-90 as ability_img %}
+            {% image ability.image width-90 height-90 as ability_img %}
             <img src="{{ ability_img.url }}"
                  class="img-thumbnail"
                  alt="{{ ability_img.alt }}">
@@ -12,23 +12,23 @@
     </div>
     <div class="col-md-9">
         <p class="normal-p not-visible-small">
-            {{ ability.value.name }}
+            {{ ability.name }}
         </p>
         <p class="normal-p text-center not-visible-big">
-            {{ ability.value.name }}
+            {{ ability.name }}
         </p>
         <div class="x-small-p not-visible-small">
             {% if page.template_language == 'fa' %}
-                {{ ability.value.farsi_summary|richtext }}
+                {{ ability.farsi_summary|richtext }}
             {% elif page.template_language == 'en' %}
-                {{ ability.value.summary|richtext }}
+                {{ ability.summary|richtext }}
             {% endif %}
         </div>
         <div class="x-small-p text-center not-visible-big">
             {% if page.template_language == 'fa' %}
-                {{ ability.value.farsi_summary|richtext }}
+                {{ ability.farsi_summary|richtext }}
             {% elif page.template_language == 'en' %}
-                {{ ability.value.summary|richtext }}
+                {{ ability.summary|richtext }}
             {% endif %}
         </div>
     </div>
