@@ -1,6 +1,6 @@
 from django import forms
 from django.db import models
-from wagtail.admin.edit_handlers import MultiFieldPanel, FieldRowPanel, FieldPanel, StreamFieldPanel
+from wagtail.admin.edit_handlers import MultiFieldPanel, FieldRowPanel, FieldPanel, StreamFieldPanel, RichTextFieldPanel
 from wagtail.api import APIField
 from wagtail.core.blocks import StreamBlock
 from wagtail.core.fields import StreamField, RichTextField
@@ -107,6 +107,34 @@ class HeroRole(HeroCategory):
 
 
 @register_snippet
+class Ability(models.Model):
+    name = models.TextField(blank=False)
+    image = models.ForeignKey(
+        'wagtailimages.Image',
+        null=True, blank=False, on_delete=models.SET_NULL, related_name='+'
+    )
+    summary = RichTextField(
+        features=configurations.RICHTEXT_FEATURES, blank=False, null=False
+    )
+    farsi_summary = RichTextField(
+        features=configurations.RICHTEXT_FEATURES, blank=False, null=False
+    )
+
+    panels = [
+        FieldPanel('name'),
+        ImageChooserPanel('image'),
+        RichTextFieldPanel('summary'),
+        RichTextFieldPanel('farsi_summary'),
+    ]
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name_plural = 'Abilities'
+
+
+@register_snippet
 class Hero(models.Model):
     horizontal_image = models.ForeignKey(
         'wagtailimages.Image',
@@ -198,6 +226,12 @@ class Hero(models.Model):
         null=True, blank=True, features=configurations.RICHTEXT_FEATURES
     )
 
+    hero_abilities = StreamField(
+        [
+            ('ability', SnippetChooserBlock(Ability))
+        ], blank=False, null=True
+    )
+
     abilities = StreamField(
         [
             ('ability', HeroAbility())
@@ -279,7 +313,8 @@ class Hero(models.Model):
         ),
         MultiFieldPanel(
             [
-                StreamFieldPanel('abilities')
+                StreamFieldPanel('abilities'),
+                StreamFieldPanel('hero_abilities'),
             ], heading='Abilities', classname='collapsible collapsed'
         ),
         MultiFieldPanel(
