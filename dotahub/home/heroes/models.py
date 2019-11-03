@@ -9,6 +9,7 @@ from wagtail.images.edit_handlers import ImageChooserPanel
 from wagtail.snippets.blocks import SnippetChooserBlock
 from wagtail.snippets.edit_handlers import SnippetChooserPanel
 from wagtail.snippets.models import register_snippet
+from wagtail.search import index
 
 from .blocks import *
 from .. import configurations
@@ -107,7 +108,7 @@ class HeroRole(HeroCategory):
 
 
 @register_snippet
-class Ability(models.Model):
+class Ability(index.Indexed, models.Model):
     name = models.TextField(blank=False)
     image = models.ForeignKey(
         'wagtailimages.Image',
@@ -125,6 +126,10 @@ class Ability(models.Model):
         ImageChooserPanel('image'),
         RichTextFieldPanel('summary'),
         RichTextFieldPanel('farsi_summary'),
+    ]
+
+    search_fields = [
+        index.SearchField('name', partial_match=True)
     ]
 
     def __str__(self):
